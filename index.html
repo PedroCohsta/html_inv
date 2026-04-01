@@ -64,7 +64,7 @@
   
   .card-content { padding: 16px; }
   .card-title { font-weight: 600; font-size: 18px; margin-bottom: 4px; }
-  .card-sub { font-size: 12px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+  .card-sub { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; font-family: var(--mono); }
   .badge { background: var(--surface2); padding: 4px 10px; border-radius: 6px; font-size: 12px; color: var(--accent); border: 1px solid var(--border); display: inline-block; }
   
   .spec-badge { background: #1c1c1e; color: #8e8e93; font-size: 10px; padding: 4px 8px; border-radius: 6px; font-family: var(--mono); border: 1px solid var(--border); margin: 0 4px 4px 0; display: inline-block; }
@@ -106,7 +106,7 @@
 
     <!-- CRIAR NOVO MODELO -->
     <div id="new-model-block" style="display:none; background: rgba(48,209,88,0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(48,209,88,0.2);">
-      <div class="input-group"><label>Nome do Modelo</label><input type="text" id="f-new-name" placeholder="Ex: Dell Precision"></div>
+      <div class="input-group"><label>Nome do Modelo</label><input type="text" id="f-new-name" placeholder="Ex: Dell Precision 3560"></div>
       <div class="input-group">
         <label>Categoria</label>
         <select id="f-new-type">
@@ -121,6 +121,7 @@
         </select>
       </div>
 
+      <!-- Detalhes Dinâmicos -->
       <div id="specs-block" style="display:none;" class="input-group">
         <label>Specs (CPU | RAM | SSD)</label>
         <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:5px;">
@@ -134,29 +135,29 @@
          <label>Cor e Impressora Alvo</label>
          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
            <select id="f-t-color"><option value="Preto">Preto</option><option value="Ciano">Ciano</option><option value="Magenta">Magenta</option><option value="Amarelo">Amarelo</option></select>
-           <input type="text" id="f-t-printer" placeholder="Qual impressora?">
+           <input type="text" id="f-t-printer" placeholder="Ex: HP M428">
          </div>
       </div>
 
       <div id="mic-block" style="display:none;" class="input-group">
-         <label>Qtd Microfones Sem Fio</label>
+         <label>Canais/Microfones</label>
          <input type="number" id="f-mic-count" placeholder="Ex: 2">
       </div>
 
       <div class="input-group">
-        <label>Link da Foto ou Emoji</label>
+        <label>Foto (Link ou Emoji)</label>
         <input type="text" id="f-icon" value="📦">
-        <small style="font-size: 10px; color: var(--muted);">Cole o link da imagem acima para trocar o ícone.</small>
       </div>
       <button class="btn-secondary" id="cancel-new-mod-btn">Cancelar</button>
     </div>
 
+    <!-- DADOS DO ATIVO -->
     <div style="margin-top:20px;">
       <div id="ip-block" style="display:none;" class="input-group">
         <label style="color: var(--accent);">Endereço IP</label>
-        <input type="text" id="f-ip" placeholder="0.0.0.0">
+        <input type="text" id="f-ip" placeholder="192.168.1.100">
       </div>
-      <div class="input-group"><label>Hostname / Nome Rede</label><input type="text" id="f-hostname" placeholder="Nome na Rede"></div>
+      <div class="input-group"><label>Hostname / Nome Rede</label><input type="text" id="f-hostname" placeholder="Ex: PC-SALA-01"></div>
       <div class="input-group"><label>Sala / Setor</label><input type="text" id="f-setor" placeholder="Ex: Sala 202"></div>
     </div>
     
@@ -201,8 +202,11 @@
     document.getElementById('sync-btn').onclick = load;
     document.getElementById('show-new-mod-btn').onclick = () => toggleNewMod(true);
     document.getElementById('cancel-new-mod-btn').onclick = () => toggleNewMod(false);
+    
+    // Atualizar campos ao mudar tipo ou modelo
     document.getElementById('f-new-type').onchange = updateUI;
     document.getElementById('f-modelo').onchange = updateUI;
+    
     document.getElementById('save-btn').onclick = save;
     document.getElementById('search').oninput = render;
     document.getElementById('filter-room').onchange = render;
@@ -223,7 +227,6 @@
   function toggleNewMod(on) {
     document.getElementById('model-select-block').style.display = on ? 'none' : 'block';
     document.getElementById('new-model-block').style.display = on ? 'block' : 'none';
-    if(!on) document.getElementById('f-new-name').value = '';
     updateUI();
   }
 
@@ -240,11 +243,13 @@
       document.getElementById('del-mod-btn').style.display = mid ? 'block' : 'none';
     }
 
+    // Mostrar blocos específicos
     document.getElementById('specs-block').style.display = (cat.includes('computador') || cat.includes('notebook')) ? 'block' : 'none';
     document.getElementById('toner-block').style.display = cat.includes('toner') ? 'block' : 'none';
     document.getElementById('mic-block').style.display = cat.includes('receptor') ? 'block' : 'none';
     
-    const isNet = cat.includes('access') || cat.includes('impressora') || cat.includes('computador') || cat.includes('servidor') || cat.includes('switch') || cat.includes('router');
+    // Mostrar campo IP para ativos de rede
+    const isNet = cat.includes('access') || cat.includes('impressora') || cat.includes('computador') || cat.includes('notebook') || cat.includes('servidor') || cat.includes('switch') || cat.includes('router');
     document.getElementById('ip-block').style.display = isNet ? 'block' : 'none';
   }
 
@@ -259,7 +264,7 @@
       updateSelectors();
       render();
     } catch (e) {
-      list.innerHTML = '<div class="loader" style="color:var(--danger)">Erro de ligação. Verifique se a API está ativa.</div>';
+      list.innerHTML = '<div class="loader" style="color:var(--danger)">Erro de ligação.</div>';
     }
   }
 
@@ -278,8 +283,6 @@
 
     const chips = document.getElementById('cat-chips');
     chips.innerHTML = `<button class="chip ${DB.cat === 'TODOS' ? 'active' : ''}" onclick="setCategory('TODOS')">Todos</button>`;
-    
-    // Categorias únicas baseadas nos modelos existentes
     const cats = [...new Set(DB.modelos.map(m => String(m.tipo || "")))].filter(t => t && t !== "undefined").sort();
     cats.forEach(c => {
       chips.innerHTML += `<button class="chip ${DB.cat === c ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`;
@@ -292,9 +295,10 @@
     const btn = document.getElementById('save-btn');
     const isNew = document.getElementById('new-model-block').style.display === 'block';
     
-    // Gerar ID seguro
+    // Gerar ID Automático (slug)
+    const nameInput = document.getElementById('f-new-name').value;
     const mid = isNew 
-      ? document.getElementById('f-new-name').value.toLowerCase().trim().replace(/\s+/g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+      ? nameInput.toLowerCase().trim().replace(/\s+/g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
       : document.getElementById('f-modelo').value;
     
     if(!mid || !document.getElementById('f-serial').value) return alert("Erro: Série e Modelo são obrigatórios!");
@@ -304,7 +308,7 @@
       qtd: document.getElementById('f-qtd').value,
       modeloid: mid,
       isNovoModelo: isNew,
-      nomeModelo: document.getElementById('f-new-name').value,
+      nomeModelo: nameInput,
       tipo: document.getElementById('f-new-type').value,
       cpu: document.getElementById('f-cpu').value,
       ram: document.getElementById('f-ram').value,
@@ -323,13 +327,9 @@
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
       alert("Equipamento registado!");
       resetForm();
-      setTimeout(load, 2000); // Mais tempo para o Google consolidar os dados
+      setTimeout(load, 1500);
       showView('inventory');
-    } catch (e) {
-      alert("Erro de rede.");
-    } finally {
-      btn.innerText = "GUARDAR EQUIPAMENTO"; btn.disabled = false;
-    }
+    } catch (e) { alert("Erro de rede."); } finally { btn.innerText = "GUARDAR EQUIPAMENTO"; btn.disabled = false; }
   }
 
   function resetForm() {
@@ -345,7 +345,6 @@
     if(!url || typeof url !== 'string') return "📦";
     const cleanUrl = url.trim();
     if(!cleanUrl.startsWith('http')) return cleanUrl;
-
     if(cleanUrl.includes('drive.google.com')){
       const id = cleanUrl.match(/\/d\/([^/]+)/) || cleanUrl.match(/id=([^&]+)/);
       if(id) return `https://drive.google.com/uc?export=view&id=${id[1]}`;
@@ -359,10 +358,11 @@
     const r = document.getElementById('filter-room').value;
 
     const filtered = DB.ativos.filter(a => {
-      // Busca flexível de modelo (compara como string e ignora espaços)
-      const m = DB.modelos.find(x => String(x.id).trim() === String(a.modeloid).trim()) || {};
-      const text = (String(a.serial||"") + String(a.hostname||"") + String(m.nome||"") + String(a.ip||"")).toLowerCase();
+      // Busca segura do modelo
+      const modelID = String(a.modeloid || "").trim().toLowerCase();
+      const m = DB.modelos.find(x => String(x.id).trim().toLowerCase() === modelID) || {};
       
+      const text = (String(a.serial||"") + String(a.hostname||"") + String(m.nome||"") + String(a.ip||"")).toLowerCase();
       const matchCat = DB.cat === 'TODOS' || String(m.tipo).toUpperCase() === DB.cat.toUpperCase();
       const matchRoom = r === 'ALL' || String(a.setor) === r;
       return matchCat && matchRoom && text.includes(q);
@@ -371,11 +371,11 @@
     if(!filtered.length) { grid.innerHTML = '<div class="loader">Nenhum equipamento encontrado.</div>'; return; }
 
     grid.innerHTML = filtered.reverse().map(a => {
-      const m = DB.modelos.find(x => String(x.id).trim() === String(a.modeloid).trim()) || {};
-      const imgUrl = formatImg(m.icon || m.foto);
+      const modelID = String(a.modeloid || "").trim().toLowerCase();
+      const m = DB.modelos.find(x => String(x.id).trim().toLowerCase() === modelID) || {};
       
+      const imgUrl = formatImg(m.icon || m.foto);
       const isUrl = imgUrl.startsWith('http');
-      // Adicionado referrerpolicy="no-referrer" para evitar bloqueios de links do Google thumbnails
       const visual = isUrl 
         ? `<img src="${imgUrl}" referrerpolicy="no-referrer" alt="Foto" onerror="this.onerror=null; this.parentElement.innerHTML='<span>⚠️</span>';">` 
         : `<span>${imgUrl || '📦'}</span>`;
