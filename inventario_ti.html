@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Inventário TI Glória 122</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f; 
+    --surface: #161616; 
+    --surface2: #1e1e1e; 
+    --border: #2a2a2a;
+    --text: #e8e8e8; 
+    --muted: #777; 
+    --accent: #4ade80; 
+    --danger: #ef4444;
+    --warn: #fbbf24;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font); 
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* --- CABEÇALHO --- */
+  header {
+    background: var(--surface);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky; top: 0; z-index: 100;
+  }
+  
+  .logo { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--muted); letter-spacing: 0.1em; }
+  .logo span { color: var(--accent); font-weight: 600; }
+
+  /* --- NAVEGAÇÃO PRINCIPAL --- */
+  nav {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  /* Transformado em botão nativo para Mobile */
+  .nav-btn {
+    flex: 1; padding: 15px; text-align: center;
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    color: var(--muted); cursor: pointer; 
+    transition: 0.2s; background: transparent; 
+    border: none; border-bottom: 2px solid transparent; outline: none;
+    font-family: inherit;
+  }
+  
+  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--surface2); }
+
+  main { padding: 20px; max-width: 1200px; margin: 0 auto; }
+  .hidden { display: none !important; }
+
+  /* --- FORMULÁRIO DE REGISTO --- */
+  .form-container { 
+    max-width: 500px; margin: 0 auto; background: var(--surface); 
+    padding: 24px; border-radius: 12px; border: 1px solid var(--border); 
+  }
+  
+  .input-group { margin-bottom: 15px; }
+  label { display: block; font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }
+  
+  input, select {
+    width: 100%; padding: 12px; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 8px;
+    color: #fff; font-size: 14px; outline: none;
+    transition: border-color 0.2s;
+  }
+
+  /* Melhoria Mobile para Selects */
+  select {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234ade80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  input:focus, select:focus { border-color: var(--accent); }
+  
+  .btn-submit {
+    width: 100%; padding: 16px; background: var(--accent);
+    color: #000; border: none; border-radius: 8px;
+    font-weight: 700; cursor: pointer; font-size: 14px; margin-top: 10px; transition: 0.2s;
+  }
+  .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Botão Eliminar Modelo no Formulário */
+  .delete-model-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--danger); padding: 0 16px; border-radius: 8px;
+    cursor: pointer; transition: 0.2s; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .delete-model-btn:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); }
+
+  /* --- SECÇÃO DE FILTROS --- */
+  .filter-section { margin-bottom: 24px; }
+  .category-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 8px; }
+  
+  .category-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--muted); padding: 8px 16px; border-radius: 20px;
+    font-size: 12px; white-space: nowrap; cursor: pointer; transition: 0.2s; font-weight: 500; outline: none;
+  }
+  .category-btn.active { background: #1a3d27; color: var(--accent); border-color: var(--accent); }
+
+  .search-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .search-row { grid-template-columns: 1fr; } }
+
+  /* --- GRELHA DE ATIVOS --- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; position: relative;
+    animation: fadeIn 0.3s ease-out;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .card-img {
+    width: 100%; height: 140px; background: #222; border-radius: 8px; margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border);
+  }
+  .card-img img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
+  .card-img span { font-size: 54px; }
+
+  .card-title { font-weight: 600; font-size: 15px; margin-bottom: 4px; padding-right: 30px; }
+  .card-sub { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-bottom: 10px; }
+  
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; background: #1a3d27; color: var(--accent); font-size: 11px; font-weight: 600; }
+  .data-row { display: flex; justify-content: space-between; font-size: 12px; font-family: var(--mono); margin-top: 8px; }
+  .label-key { color: var(--muted); }
+
+  .specs-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+  .spec-badge { display: inline-flex; align-items: center; justify-content: center; background: #222; border: 1px solid var(--border); color: #ccc; font-size: 10px; padding: 4px 8px; border-radius: 4px; margin-right: 4px; margin-bottom: 4px; font-family: var(--mono); }
+
+  /* BOTÃO ELIMINAR */
+  .delete-btn {
+    position: absolute; top: 16px; right: 16px;
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; transition: 0.2s; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 50%;
+  }
+  .delete-btn:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+  /* MODAL DE CONFIRMAÇÃO */
+  .confirm-overlay {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.85); z-index: 1000;
+    display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+  }
+  .confirm-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 24px; border-radius: 16px; max-width: 350px; width: 90%; text-align: center;
+  }
+  .confirm-btns { display: flex; gap: 12px; margin-top: 24px; }
+  .confirm-btns button { flex: 1; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s;}
+  .btn-no { background: var(--surface2); color: var(--text); }
+  .btn-no:hover { background: var(--border); }
+  .btn-yes { background: var(--danger); color: #fff; }
+  .btn-yes:hover { opacity: 0.9; }
+
+  .loader { text-align: center; color: var(--muted); padding: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">// INVENTÁRIO <span>TI GLÓRIA 122</span></div>
+  <button id="btn-sync" title="Sincronizar" style="background:none; border:none; color:var(--muted); cursor:pointer; font-size: 18px; transition: 0.2s; outline:none;">↻</button>
+</header>
+
+<nav>
+  <button class="nav-btn active" id="btn-scan">Novo Registo</button>
+  <button class="nav-btn" id="btn-view">Inventário</button>
+</nav>
+
+<main>
+  <!-- ABA DE REGISTRO MANUAL -->
+  <div id="tab-scan" class="form-container">
+    <div class="input-group">
+      <label>Património / Número de Série</label>
+      <input type="text" id="f-serial" placeholder="Digite o número de série...">
+    </div>
+
+    <div class="input-group">
+      <label>Modelo do Equipamento</label>
+      <div style="display: flex; gap: 8px;">
+        <select id="f-modelo" style="flex: 1;">
+          <option value="">Selecione o modelo...</option>
+          <option value="NEW">+ Adicionar Novo Modelo</option>
+        </select>
+        <button id="btn-delete-model" class="delete-model-btn hidden" title="Eliminar Modelo">🗑️</button>
+      </div>
+    </div>
+
+    <!-- CAMPOS PARA NOVO MODELO -->
+    <div id="new-model-fields" class="hidden" style="background: var(--surface2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed var(--accent);">
+      <div class="input-group">
+        <label>Nome do Modelo</label>
+        <input type="text" id="f-new-name" placeholder="Ex: Dell Optiplex 3070">
+      </div>
+      
+      <div class="input-group">
+        <label>Categoria (Tipo)</label>
+        <select id="f-new-type-select">
+          <option value="">Selecione uma categoria...</option>
+          <option value="Computador">Computador</option>
+          <option value="Notebook">Notebook / Portátil</option>
+          <option value="Monitor">Monitor</option>
+          <option value="Impressora">Impressora</option>
+          <option value="Amplificador">Amplificador</option>
+          <option value="UPS">UPS / Nobreak</option>
+          <option value="Servidor">Servidor</option>
+          <option value="OUTRO">Outro (Digitar manualmente)</option>
+        </select>
+      </div>
+      
+      <div class="input-group hidden" id="custom-type-group">
+        <label>Qual a categoria?</label>
+        <input type="text" id="f-new-type-custom" placeholder="Ex: Projetor, Switch...">
+      </div>
+      
+      <!-- ESPECIFICAÇÕES -->
+      <div id="specs-fields" class="hidden">
+        <label>Especificações Técnicas</label>
+        <div class="specs-grid">
+          <input type="text" id="f-new-cpu" placeholder="Proc. (ex: i5)">
+          <input type="text" id="f-new-ram" placeholder="RAM (ex: 8GB)">
+          <input type="text" id="f-new-storage" placeholder="Disco (ex: 256GB)">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Emoji / Ícone</label>
+        <input type="text" id="f-new-icon" value="📦">
+      </div>
+      <div class="input-group" style="margin-bottom:0">
+        <label>ID Único (Gerado Automaticamente)</label>
+        <input type="text" id="f-new-id" readonly style="background: #111; color: var(--muted);">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Nome do Host (Hostname)</label>
+      <input type="text" id="f-hostname" placeholder="Ex: PC-COORD-01">
+    </div>
+
+    <div class="input-group">
+      <label>Setor / Sala</label>
+      <input type="text" id="f-setor" placeholder="Ex: Receção, Sala 202...">
+    </div>
+
+    <button class="btn-submit" id="btn-save">GUARDAR EQUIPAMENTO</button>
+  </div>
+
+  <!-- ABA DE VISUALIZAÇÃO (INVENTÁRIO) -->
+  <div id="tab-view" class="hidden">
+    <div class="filter-section">
+      <div class="category-tabs" id="category-chips">
+        <button class="category-btn active" onclick="filterByCategory('TODOS')">Todos</button>
+      </div>
+      
+      <div class="search-row">
+        <div class="input-group" style="margin-bottom:0">
+          <label>Pesquisa de Texto</label>
+          <input type="text" id="search-input" placeholder="Filtrar por nome ou série...">
+        </div>
+        <div class="input-group" style="margin-bottom:0">
+          <label>Filtrar por Sala</label>
+          <select id="filter-room">
+            <option value="ALL">Todas as Salas</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div id="asset-grid" class="grid">
+      <div class="loader">A carregar inventário...</div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
+<div id="confirm-box" class="confirm-overlay hidden">
+  <div class="confirm-modal">
+    <h3 id="confirm-title">Eliminar Equipamento?</h3>
+    <p id="confirm-text">Tens a certeza de que desejas remover este equipamento? Esta ação não pode ser desfeita na folha de cálculo.</p>
+    <div class="confirm-btns">
+      <button class="btn-no" id="btn-cancel-delete">Cancelar</button>
+      <button class="btn-yes" id="confirm-delete-btn">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==========================================
+// LÓGICA DE PROGRAMAÇÃO EM JAVASCRIPT
+// ==========================================
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwcxhSyEvWsnS9NegVbXxBXsAyPBn8drF3alTsdHnq2mmATFWLWFBrdANc7gxGGoDV/exec"; 
+
+let modelos = [];
+let ativos = [];
+let currentCategory = 'TODOS';
+let itemToDelete = null;
+let deleteType = 'asset'; 
+
+// Arranque Seguro: Só executa quando a página e o telemóvel estiverem 100% carregados
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // Conectar Botões de Navegação (Abas)
+  document.getElementById('btn-scan').addEventListener('click', () => showTab('scan'));
+  document.getElementById('btn-view').addEventListener('click', () => showTab('view'));
+  document.getElementById('btn-sync').addEventListener('click', fetchData);
+  
+  // Conectar Formulário
+  document.getElementById('f-modelo').addEventListener('change', checkNewModel);
+  document.getElementById('f-new-type-select').addEventListener('change', checkModelType);
+  document.getElementById('f-new-type-custom').addEventListener('input', checkModelType);
+  document.getElementById('f-new-name').addEventListener('input', (e) => suggestId(e.target.value));
+  document.getElementById('btn-save').addEventListener('click', saveData);
+  document.getElementById('btn-delete-model').addEventListener('click', askDeleteModel);
+  
+  // Conectar Filtros e Modal
+  document.getElementById('search-input').addEventListener('input', renderDashboard);
+  document.getElementById('filter-room').addEventListener('change', renderDashboard);
+  document.getElementById('btn-cancel-delete').addEventListener('click', closeConfirm);
+  document.getElementById('confirm-delete-btn').addEventListener('click', executeDelete);
+
+  // Iniciar Busca de Dados
+  fetchData();
+});
+
+async function fetchData() {
+  const grid = document.getElementById('asset-grid');
+  try {
+    const response = await fetch(SCRIPT_URL + "?action=getAll");
+    const data = await response.json();
+    modelos = data.modelos || [];
+    ativos = data.ativos || [];
+    
+    updateUIComponents();
+    renderDashboard();
+  } catch (e) { 
+    grid.innerHTML = "<div class='loader'>⚠️ Erro ao conectar com o Google Sheets. Verifica a tua ligação à internet.</div>";
+  }
+}
+
+// Atualização Segura para Mobile (usando new Option em vez de innerHTML nos selects)
+function updateUIComponents() {
+  // Select de Modelos
+  const selectModelo = document.getElementById('f-modelo');
+  const currentVal = selectModelo.value;
+  selectModelo.options.length = 0; // Limpa as opções de forma segura
+  selectModelo.add(new Option("Selecione o modelo...", ""));
+  selectModelo.add(new Option("+ Adicionar Novo Modelo", "NEW"));
+  modelos.forEach(m => selectModelo.add(new Option(m.nome, m.id)));
+  selectModelo.value = currentVal || "";
+  checkNewModel(); 
+
+  // Chips de Categoria
+  const container = document.getElementById('category-chips');
+  const tipos = [...new Set(modelos.map(m => m.tipo).filter(t => t))].sort();
+  container.innerHTML = `<button class="category-btn ${currentCategory === 'TODOS' ? 'active' : ''}" onclick="filterByCategory('TODOS')">Todos</button>`;
+  tipos.forEach(tipo => {
+    container.innerHTML += `<button class="category-btn ${currentCategory === tipo ? 'active' : ''}" onclick="filterByCategory('${tipo}')">${tipo}</button>`;
+  });
+
+  // Select de Salas
+  const roomSelect = document.getElementById('filter-room');
+  const currentRoom = roomSelect.value;
+  const salas = [...new Set(ativos.map(a => a.setor).filter(s => s))].sort();
+  roomSelect.options.length = 0;
+  roomSelect.add(new Option("Todas as Salas", "ALL"));
+  salas.forEach(sala => roomSelect.add(new Option(sala, sala)));
+  roomSelect.value = currentRoom || "ALL";
+}
+
+// A função filterByCategory é chamada pelos botões gerados dinamicamente
+window.filterByCategory = function(tipo) {
+  currentCategory = tipo;
+  updateUIComponents(); 
+  renderDashboard();
+};
+
+function suggestId(name) {
+  const idField = document.getElementById('f-new-id');
+  idField.value = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, ''); 
+}
+
+function checkNewModel() {
+  const selectVal = document.getElementById('f-modelo').value;
+  const isNew = selectVal === "NEW";
+  
+  document.getElementById('new-model-fields').classList.toggle('hidden', !isNew);
+  
+  const showTrash = selectVal !== "" && selectVal !== "NEW";
+  document.getElementById('btn-delete-model').classList.toggle('hidden', !showTrash);
+
+  if (isNew) checkModelType();
+}
+
+function checkModelType() {
+  const selectVal = document.getElementById('f-new-type-select').value;
+  const isCustom = selectVal === 'OUTRO';
+  
+  document.getElementById('custom-type-group').classList.toggle('hidden', !isCustom);
+  
+  const finalType = isCustom ? document.getElementById('f-new-type-custom').value.toLowerCase() : selectVal.toLowerCase();
+  const needsSpecs = finalType.includes('computador') || finalType.includes('portátil') || finalType.includes('notebook') || finalType.includes('pc') || finalType.includes('servidor');
+  
+  const specsDiv = document.getElementById('specs-fields');
+  if(specsDiv) specsDiv.classList.toggle('hidden', !needsSpecs);
+}
+
+function getFinalCategoryValue() {
+  const selectVal = document.getElementById('f-new-type-select').value;
+  if (selectVal === 'OUTRO') return document.getElementById('f-new-type-custom').value.trim();
+  return selectVal;
+}
+
+async function saveData() {
+  const btn = document.getElementById('btn-save');
+  const payload = {
+    serial: document.getElementById('f-serial').value.trim(),
+    hostname: document.getElementById('f-hostname').value.trim(),
+    setor: document.getElementById('f-setor').value.trim(),
+    modeloid: document.getElementById('f-modelo').value,
+    isNovoModelo: document.getElementById('f-modelo').value === "NEW",
+    nomeModelo: document.getElementById('f-new-name').value.trim(),
+    tipo: getFinalCategoryValue() || "Equipamento",
+    icon: document.getElementById('f-new-icon').value.trim() || "📦",
+    cpu: document.getElementById('f-new-cpu') ? document.getElementById('f-new-cpu').value.trim() : "",
+    ram: document.getElementById('f-new-ram') ? document.getElementById('f-new-ram').value.trim() : "",
+    storage: document.getElementById('f-new-storage') ? document.getElementById('f-new-storage').value.trim() : ""
+  };
+
+  if (payload.isNovoModelo) payload.modeloid = document.getElementById('f-new-id').value;
+  
+  if (!payload.serial || !payload.modeloid) {
+    return alert("Preenche pelo menos o Património/Série e o Modelo!");
+  }
+
+  btn.innerText = "A GUARDAR..."; 
+  btn.disabled = true;
+
+  try {
+    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+    alert("Equipamento registado com sucesso!");
+    resetForm();
+    await fetchData(); 
+    showTab('view');   
+  } catch (e) {
+    alert("Erro ao guardar o equipamento. Verifica a tua ligação.");
+  } finally {
+    btn.innerText = "GUARDAR EQUIPAMENTO"; 
+    btn.disabled = false;
+  }
+}
+
+function resetForm() {
+  ['f-serial', 'f-hostname', 'f-setor', 'f-modelo', 'f-new-name', 'f-new-id', 'f-new-type-select', 'f-new-type-custom', 'f-new-cpu', 'f-new-ram', 'f-new-storage'].forEach(id => {
+    if(document.getElementById(id)) document.getElementById(id).value = "";
+  });
+  document.getElementById('f-new-icon').value = "📦";
+  checkNewModel();
+}
+
+function renderDashboard() {
+  const grid = document.getElementById('asset-grid');
+  const query = document.getElementById('search-input').value.toLowerCase();
+  const room = document.getElementById('filter-room').value;
+
+  let filtered = [...ativos].reverse().filter(a => {
+    const m = modelos.find(mod => String(mod.id) === String(a.modeloid)) || {};
+    const matchCategory = currentCategory === 'TODOS' || m.tipo === currentCategory;
+    const matchRoom = room === 'ALL' || a.setor === room;
+    const matchSearch = a.serial.toLowerCase().includes(query) || a.hostname.toLowerCase().includes(query) || (m.nome && m.nome.toLowerCase().includes(query));
+    return matchCategory && matchRoom && matchSearch;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = "<div class='loader'>Nenhum equipamento encontrado com estes filtros.</div>";
+    return;
+  }
+
+  grid.innerHTML = filtered.map(a => {
+    const m = modelos.find(mod => String(mod.id) === String(a.modeloid)) || {};
+    const visual = m.foto ? `<img src="${m.foto}" alt="${m.nome}">` : `<span>${m.icon || '📦'}</span>`;
+
+    let specsHtml = "";
+    if (m.cpu || m.ram || m.storage) {
+      specsHtml = `<div style="margin-top: 8px;">
+        ${m.cpu ? `<span class="spec-badge">⚙️ ${m.cpu}</span>` : ''}
+        ${m.ram ? `<span class="spec-badge">🧠 ${m.ram}</span>` : ''}
+        ${m.storage ? `<span class="spec-badge">💾 ${m.storage}</span>` : ''}
+      </div>`;
+    }
+
+    return `
+      <div class="card">
+        <button class="delete-btn" onclick="askDelete('${a.id}')" title="Eliminar Equipamento">✕</button>
+        <div class="card-img">${visual}</div>
+        <div class="card-title">${m.nome || a.modeloid}</div>
+        <div class="card-sub">${m.tipo || 'ATIVO'}</div>
+        <div class="badge">${a.setor || 'Sem Sala'}</div>
+        ${specsHtml}
+        <div class="card-data">
+          <div class="data-row"><span class="label-key">hostname</span><span>${a.hostname || '—'}</span></div>
+          <div class="data-row"><span class="label-key">série</span><span>${a.serial}</span></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Precisa estar no window para os botões dinâmicos encontrarem a função
+window.askDelete = function(id) {
+  itemToDelete = id;
+  deleteType = 'asset';
+  document.getElementById('confirm-title').innerText = "Eliminar Equipamento?";
+  document.getElementById('confirm-text').innerText = "Tens a certeza de que desejas remover este equipamento? Esta ação não pode ser desfeita na folha de cálculo.";
+  document.getElementById('confirm-box').classList.remove('hidden');
+};
+
+function askDeleteModel() {
+  const select = document.getElementById('f-modelo');
+  const modelId = select.value;
+  if(!modelId || modelId === "NEW") return;
+  const modelName = select.options[select.selectedIndex].text;
+  
+  itemToDelete = modelId;
+  deleteType = 'model';
+  document.getElementById('confirm-title').innerText = "Eliminar Modelo do Filtro?";
+  document.getElementById('confirm-text').innerText = `Desejas remover permanentemente o modelo "${modelName}" do sistema? Atenção: Todos os equipamentos vinculados a este modelo também serão eliminados!`;
+  document.getElementById('confirm-box').classList.remove('hidden');
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-box').classList.add('hidden');
+  itemToDelete = null;
+}
+
+async function executeDelete() {
+  if (!itemToDelete) return;
+  const btn = document.getElementById('confirm-delete-btn');
+  btn.innerText = "A aguardar..."; btn.disabled = true;
+
+  try {
+    const actionToSend = deleteType === 'model' ? 'delete_model' : 'delete';
+    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: actionToSend, id: itemToDelete }) });
+    
+    if(deleteType === 'model') {
+      modelos = modelos.filter(m => String(m.id) !== String(itemToDelete));
+      ativos = ativos.filter(a => String(a.modeloid) !== String(itemToDelete));
+      document.getElementById('f-modelo').value = "";
+      checkNewModel();
+    } else {
+      ativos = ativos.filter(a => String(a.id) !== String(itemToDelete));
+    }
+    
+    renderDashboard();
+    updateUIComponents(); 
+    closeConfirm();
+  } catch (e) {
+    alert("Houve um problema ao eliminar. Tenta novamente.");
+  } finally {
+    btn.innerText = "Eliminar"; btn.disabled = false;
+  }
+}
+
+function showTab(tab) {
+  document.getElementById('tab-scan').classList.toggle('hidden', tab !== 'scan');
+  document.getElementById('tab-view').classList.toggle('hidden', tab !== 'view');
+  document.getElementById('btn-scan').classList.toggle('active', tab === 'scan');
+  document.getElementById('btn-view').classList.toggle('active', tab === 'view');
+  if(tab === 'view') renderDashboard();
+}
+</script>
+</body>
+</html>
