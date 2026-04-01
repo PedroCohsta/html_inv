@@ -235,7 +235,7 @@
       cat = document.getElementById('f-new-type').value.toLowerCase();
     } else {
       const mid = document.getElementById('f-modelo').value;
-      const m = DB.modelos.find(x => String(x.id) === String(mid));
+      const m = DB.modelos.find(x => String(x.id).trim() === String(mid).trim());
       cat = m ? String(m.tipo).toLowerCase() : "";
       document.getElementById('del-mod-btn').style.display = mid ? 'block' : 'none';
     }
@@ -278,7 +278,10 @@
 
     const chips = document.getElementById('cat-chips');
     chips.innerHTML = `<button class="chip ${DB.cat === 'TODOS' ? 'active' : ''}" onclick="setCategory('TODOS')">Todos</button>`;
-    [...new Set(DB.modelos.map(m => String(m.tipo || "")))].filter(t => t && t !== "undefined").sort().forEach(c => {
+    
+    // Categorias únicas baseadas nos modelos existentes
+    const cats = [...new Set(DB.modelos.map(m => String(m.tipo || "")))].filter(t => t && t !== "undefined").sort();
+    cats.forEach(c => {
       chips.innerHTML += `<button class="chip ${DB.cat === c ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`;
     });
   }
@@ -288,7 +291,11 @@
   async function save() {
     const btn = document.getElementById('save-btn');
     const isNew = document.getElementById('new-model-block').style.display === 'block';
-    const mid = isNew ? document.getElementById('f-new-name').value.toLowerCase().replace(/\s+/g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g, "") : document.getElementById('f-modelo').value;
+    
+    // Gerar ID seguro
+    const mid = isNew 
+      ? document.getElementById('f-new-name').value.toLowerCase().trim().replace(/\s+/g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+      : document.getElementById('f-modelo').value;
     
     if(!mid || !document.getElementById('f-serial').value) return alert("Erro: Série e Modelo são obrigatórios!");
 
@@ -316,7 +323,7 @@
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
       alert("Equipamento registado!");
       resetForm();
-      setTimeout(load, 1500);
+      setTimeout(load, 2000); // Mais tempo para o Google consolidar os dados
       showView('inventory');
     } catch (e) {
       alert("Erro de rede.");
@@ -334,21 +341,15 @@
     toggleNewMod(false);
   }
 
-  // FUNÇÃO CORRIGIDA PARA LIDAR COM LINKS DO GOOGLE E EMOJIS
   function formatImg(url) {
     if(!url || typeof url !== 'string') return "📦";
-    
     const cleanUrl = url.trim();
-    
-    // Se não começar com http, assumimos que é um Emoji ou texto
     if(!cleanUrl.startsWith('http')) return cleanUrl;
 
-    // Se for Google Drive
     if(cleanUrl.includes('drive.google.com')){
       const id = cleanUrl.match(/\/d\/([^/]+)/) || cleanUrl.match(/id=([^&]+)/);
       if(id) return `https://drive.google.com/uc?export=view&id=${id[1]}`;
     }
-    
     return cleanUrl;
   }
 
@@ -358,9 +359,11 @@
     const r = document.getElementById('filter-room').value;
 
     const filtered = DB.ativos.filter(a => {
-      const m = DB.modelos.find(x => String(x.id) === String(a.modeloid)) || {};
+      // Busca flexível de modelo (compara como string e ignora espaços)
+      const m = DB.modelos.find(x => String(x.id).trim() === String(a.modeloid).trim()) || {};
       const text = (String(a.serial||"") + String(a.hostname||"") + String(m.nome||"") + String(a.ip||"")).toLowerCase();
-      const matchCat = DB.cat === 'TODOS' || String(m.tipo) === DB.cat;
+      
+      const matchCat = DB.cat === 'TODOS' || String(m.tipo).toUpperCase() === DB.cat.toUpperCase();
       const matchRoom = r === 'ALL' || String(a.setor) === r;
       return matchCat && matchRoom && text.includes(q);
     });
@@ -368,14 +371,13 @@
     if(!filtered.length) { grid.innerHTML = '<div class="loader">Nenhum equipamento encontrado.</div>'; return; }
 
     grid.innerHTML = filtered.reverse().map(a => {
-      const m = DB.modelos.find(x => String(x.id) === String(a.modeloid)) || {};
-      const rawImg = m.icon || m.foto;
-      const imgUrl = formatImg(rawImg);
+      const m = DB.modelos.find(x => String(x.id).trim() === String(a.modeloid).trim()) || {};
+      const imgUrl = formatImg(m.icon || m.foto);
       
-      // LOGICA DE RENDERIZAÇÃO DA IMAGEM MELHORADA
       const isUrl = imgUrl.startsWith('http');
+      // Adicionado referrerpolicy="no-referrer" para evitar bloqueios de links do Google thumbnails
       const visual = isUrl 
-        ? `<img src="${imgUrl}" alt="Foto" onerror="this.onerror=null; this.parentElement.innerHTML='<span>⚠️</span>';">` 
+        ? `<img src="${imgUrl}" referrerpolicy="no-referrer" alt="Foto" onerror="this.onerror=null; this.parentElement.innerHTML='<span>⚠️</span>';">` 
         : `<span>${imgUrl || '📦'}</span>`;
       
       let specs = [];
@@ -392,7 +394,7 @@
           <button class="delete-btn" onclick="askDelete('asset','${a.id}')">✕</button>
           <div class="card-img">${visual}</div>
           <div class="card-content">
-            <div class="card-title">${m.nome || 'Desconhecido'}</div>
+            <div class="card-title">${m.nome || 'Modelo Desconhecido'}</div>
             <div class="card-sub">${m.tipo || 'ATIVO'}</div>
             <div class="badge">${a.setor || 'Sem Sala'}</div>
             <div style="margin-top:8px; display: flex; flex-wrap: wrap;">${specs.map(s => `<span class="spec-badge">${s}</span>`).join('')}</div>
