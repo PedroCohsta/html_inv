@@ -15,7 +15,7 @@
     --muted: #8e8e93; 
     --accent: #30d158; 
     --danger: #ff453a;
-    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font: 'IBM Plex Sans', sans-serif;
     --mono: 'IBM Plex Mono', monospace;
     --nav-height: 70px;
   }
@@ -33,7 +33,6 @@
     padding: 16px 20px; border-bottom: 1px solid var(--border);
     display: flex; justify-content: space-between; align-items: center;
     position: sticky; top: 0; z-index: 100;
-    padding-top: max(16px, env(safe-area-inset-top));
   }
   .logo { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--muted); }
   .logo span { color: var(--accent); font-weight: 600; }
@@ -54,8 +53,8 @@
   .nav-icon { font-size: 22px; margin-bottom: 4px; }
 
   main { padding: 20px; max-width: 600px; margin: 0 auto; }
-  .view-section { display: none; animation: fadeIn 0.3s ease; }
-  .view-section.active { display: block; }
+  .view-section { display: none; }
+  .view-section.active { display: block; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
   .input-group { margin-bottom: 16px; }
@@ -64,20 +63,13 @@
   input, select {
     width: 100%; padding: 14px 16px; background: var(--surface2);
     border: 1px solid var(--border); border-radius: 12px;
-    color: #fff; font-size: 16px; 
-    outline: none; font-family: var(--font); appearance: none; -webkit-appearance: none;
+    color: #fff; font-size: 16px; outline: none; -webkit-appearance: none;
   }
   input:focus, select:focus { border-color: var(--accent); }
-  
-  .select-wrapper { position: relative; }
-  .select-wrapper::after {
-    content: "▼"; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-    color: var(--muted); font-size: 12px; pointer-events: none;
-  }
 
   .btn-primary {
     width: 100%; padding: 16px; background: var(--accent); color: #000;
-    border: none; border-radius: 12px; font-weight: 600; font-size: 16px;
+    border: none; border-radius: 12px; font-weight: 700; font-size: 16px;
     margin-top: 10px; cursor: pointer; transition: 0.2s;
   }
   .btn-primary:active { opacity: 0.7; transform: scale(0.98); }
@@ -86,14 +78,10 @@
   .btn-secondary {
     width: 100%; padding: 12px; background: transparent; color: var(--accent);
     border: 1px dashed var(--accent); border-radius: 12px; font-weight: 500; font-size: 14px;
-    margin-top: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 8px; cursor: pointer;
   }
 
-  .new-model-box { background: rgba(48, 209, 88, 0.05); border: 1px solid rgba(48, 209, 88, 0.3); padding: 16px; border-radius: 12px; margin-top: 12px; }
-  .specs-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-
   .filter-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 12px; scrollbar-width: none; }
-  .filter-scroll::-webkit-scrollbar { display: none; }
   .chip {
     background: var(--surface2); color: var(--text); padding: 8px 16px; border-radius: 20px;
     font-size: 13px; font-weight: 500; white-space: nowrap; border: 1px solid var(--border); cursor: pointer;
@@ -102,31 +90,32 @@
 
   .card {
     background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-    padding: 16px; margin-bottom: 16px; position: relative;
+    margin-bottom: 16px; position: relative; overflow: hidden;
   }
   .card-img {
-    width: 100%; height: 120px; background: var(--surface2); border-radius: 10px;
-    display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
+    width: 100%; height: 180px; background: #000;
+    display: flex; align-items: center; justify-content: center;
+    border-bottom: 1px solid var(--border);
   }
-  .card-img span { font-size: 48px; }
+  .card-img img { width: 100%; height: 100%; object-fit: contain; }
+  .card-img span { font-size: 64px; }
 
-  .card-title { font-weight: 600; font-size: 16px; margin-bottom: 4px; padding-right: 40px; }
-  .card-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-  .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; background: var(--surface2); color: var(--text); font-size: 11px; font-weight: 600; }
+  .card-content { padding: 16px; }
+  .card-title { font-weight: 600; font-size: 18px; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; background: var(--surface2); color: var(--accent); font-size: 11px; font-weight: 600; margin-bottom: 12px; }
   
-  .spec-row { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
-  .spec-badge { background: #000; color: #ccc; font-size: 10px; padding: 4px 8px; border-radius: 6px; font-family: var(--mono); border: 1px solid var(--border); }
+  .spec-badge { background: #1c1c1e; color: #8e8e93; font-size: 10px; padding: 4px 8px; border-radius: 6px; font-family: var(--mono); border: 1px solid var(--border); margin-right: 4px; }
 
-  .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--mono); font-size: 12px; background: #000; padding: 10px; border-radius: 8px; }
-  .data-col { display: flex; flex-direction: column; }
-  .data-lbl { color: var(--muted); font-size: 10px; }
-  .data-val { color: var(--accent); }
+  .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--mono); font-size: 12px; background: #000; padding: 12px; border-radius: 8px; }
+  .data-lbl { color: var(--muted); font-size: 9px; margin-bottom: 2px; }
+  .data-val { color: #fff; word-break: break-all; }
 
   .delete-btn {
-    position: absolute; top: 16px; right: 16px;
-    background: rgba(255, 69, 58, 0.1); color: var(--danger); border: none;
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(255, 69, 58, 0.2); color: var(--danger); border: none;
     width: 36px; height: 36px; border-radius: 50%; font-size: 16px;
-    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
   }
 
   .overlay {
@@ -139,13 +128,6 @@
     background: var(--surface); width: 90%; max-width: 350px;
     border-radius: 20px; padding: 24px; text-align: center; border: 1px solid var(--border);
   }
-  .modal h3 { margin-bottom: 8px; font-size: 18px; }
-  .modal p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
-  .modal-btns { display: flex; gap: 12px; }
-  .modal-btn { flex: 1; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 15px; border: none; cursor: pointer;}
-  .btn-cancel { background: var(--surface2); color: var(--text); }
-  .btn-confirm { background: var(--danger); color: #fff; }
-
   .loader { text-align: center; color: var(--muted); padding: 40px; font-size: 14px; }
 </style>
 </head>
@@ -153,352 +135,231 @@
 
 <header>
   <div class="logo">// INVENTÁRIO <span>TI GLÓRIA 122</span></div>
-  <button type="button" class="btn-sync" id="btn-sync" title="Sincronizar" onclick="loadData()">↻</button>
+  <button type="button" class="btn-sync" id="btn-sync-header">↻</button>
 </header>
 
 <main>
+  <!-- VIEW: REGISTO -->
   <div id="view-scan" class="view-section active">
-    
     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 16px;">
       <div>
-        <label>Património / Série</label>
-        <input type="text" id="f-serial" placeholder="Série/Património">
+        <label>Série / Património</label>
+        <input type="text" id="f-serial" placeholder="Digite o serial">
       </div>
       <div>
-        <label>Qtd. Itens</label>
-        <input type="number" id="f-qtd" value="1" min="1" style="text-align: center;">
+        <label>Qtd.</label>
+        <input type="number" id="f-qtd" value="1" min="1">
       </div>
     </div>
 
-    <div class="input-group" id="block-select-model">
-      <label>Equipamento (Modelo)</label>
+    <div id="block-select-model">
+      <label>Modelo Equipamento</label>
       <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-        <div class="select-wrapper" style="flex: 1;">
-          <select id="f-modelo" onchange="checkTrashButton(); updateAssetFieldsVisibility();">
-            <option value="">A carregar modelos...</option>
-          </select>
-        </div>
-        <button type="button" id="btn-delete-model" class="delete-model-btn" style="display:none;" onclick="promptDeleteModel()">🗑️</button>
+        <select id="f-modelo" style="flex: 1;">
+          <option value="">A carregar modelos...</option>
+        </select>
+        <button type="button" id="btn-delete-model-trigger" style="display:none; background:none; border:none; font-size:20px;">🗑️</button>
       </div>
-      <button type="button" id="btn-toggle-new" class="btn-secondary" onclick="toggleNewModel(true)">
-        + Adicionar Novo Modelo
-      </button>
+      <button type="button" id="btn-show-new-model" class="btn-secondary">+ Novo Modelo</button>
     </div>
 
-    <div id="block-new-model" class="new-model-box" style="display:none;">
-      <h4 style="margin-bottom: 12px; color: var(--accent); font-size: 14px;">Criar Novo Modelo</h4>
-      
+    <!-- BLOCO: NOVO MODELO -->
+    <div id="block-new-model" style="display:none; background: rgba(48, 209, 88, 0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(48, 209, 88, 0.2);">
       <div class="input-group">
         <label>Nome do Modelo</label>
-        <input type="text" id="f-new-name" placeholder="Ex: HP LaserJet M15w" oninput="suggestId(this.value)">
+        <input type="text" id="f-new-name" placeholder="Ex: HP Pro 400">
       </div>
-      
       <div class="input-group">
         <label>Categoria</label>
-        <div class="select-wrapper">
-          <select id="f-new-type-select" onchange="handleCategoryChange(); updateAssetFieldsVisibility();">
-            <option value="">Selecione...</option>
-            <option value="Computador">Computador</option>
-            <option value="Notebook">Portátil / Notebook</option>
-            <option value="Monitor">Monitor</option>
-            <option value="Access Point">Access Point</option>
-            <option value="Receptor de Microfone">Receptor de Microfone</option>
-            <option value="Microfone com fio">Microfone com fio</option>
-            <option value="Impressora">Impressora</option>
-            <option value="Amplificador">Amplificador</option>
-            <option value="UPS">UPS / Nobreak</option>
-            <option value="Servidor">Servidor</option>
-            <option value="Toner">Toner</option>
-            <option value="Outro">Outro...</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="input-group" id="group-custom-type" style="display:none;">
-        <label>Qual categoria?</label>
-        <input type="text" id="f-new-type-custom" placeholder="Ex: Projetor" oninput="handleCategoryChange(); updateAssetFieldsVisibility();">
-      </div>
-      
-      <div id="group-specs" style="display:none;">
-        <label>Especificações Técnicas</label>
-        <div class="specs-grid">
-          <input type="text" id="f-new-cpu" placeholder="CPU">
-          <input type="text" id="f-new-ram" placeholder="RAM">
-          <input type="text" id="f-new-storage" placeholder="Disco">
-        </div>
-        <br>
-      </div>
-
-      <div id="group-mic" style="display:none;">
-        <label>Microfones Sem Fio Incluídos</label>
-        <div class="specs-grid" style="grid-template-columns: 1fr;">
-          <input type="number" id="f-new-mic-count" placeholder="Qtd. de Microfones" min="1">
-        </div>
-        <br>
-      </div>
-
-      <div id="group-toner" style="display:none;">
-        <label>Detalhes do Toner</label>
-        <div class="specs-grid" style="grid-template-columns: 1fr 1fr;">
-          <div class="select-wrapper">
-            <select id="f-new-toner-color">
-              <option value="">Cor...</option>
-              <option value="Preto">Preto</option>
-              <option value="Ciano">Ciano</option>
-              <option value="Magenta">Magenta</option>
-              <option value="Amarelo">Amarelo</option>
-            </select>
-          </div>
-          <input type="text" id="f-new-toner-printer" placeholder="Para qual impressora?">
-        </div>
-        <br>
-      </div>
-
-      <div class="input-group" style="margin-bottom: 0;">
-        <label>Ícone/Emoji</label>
-        <input type="text" id="f-new-icon" value="📦">
-      </div>
-      <input type="hidden" id="f-new-id">
-
-      <button type="button" id="btn-cancel-new" class="btn-secondary" style="margin-top: 16px; border-color: var(--muted); color: var(--muted);" onclick="toggleNewModel(false)">
-        Cancelar Criação
-      </button>
-    </div>
-
-    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
-      <div class="input-group" id="group-ip" style="display:none;">
-        <label style="color: var(--accent);">Endereço IP (Rede)</label>
-        <input type="text" id="f-ip" placeholder="Ex: 10.0.0.50">
-      </div>
-
-      <div class="input-group">
-        <label>Hostname / Nome da Rede</label>
-        <input type="text" id="f-hostname" placeholder="Ex: PC-SALA-01">
-      </div>
-
-      <div class="input-group">
-        <label>Sala / Setor</label>
-        <input type="text" id="f-setor" placeholder="Ex: Recepção">
-      </div>
-    </div>
-
-    <button type="button" class="btn-primary" id="btn-save" onclick="saveEquipment()">GUARDAR EQUIPAMENTO</button>
-  </div>
-
-  <div id="view-inventory" class="view-section">
-    <div class="filter-scroll" id="category-chips"></div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-      <input type="text" id="search-input" placeholder="Pesquisar..." oninput="renderList()">
-      <div class="select-wrapper">
-        <select id="filter-room" onchange="renderList()">
-          <option value="ALL">Todas as Salas</option>
+        <select id="f-new-type">
+          <option value="Computador">Computador</option>
+          <option value="Notebook">Notebook</option>
+          <option value="Monitor">Monitor</option>
+          <option value="Access Point">Access Point</option>
+          <option value="Impressora">Impressora</option>
+          <option value="Toner">Toner</option>
+          <option value="Outro">Outro...</option>
         </select>
       </div>
+      <div class="input-group">
+        <label>Ícone ou Link da Foto</label>
+        <input type="text" id="f-icon" value="📦">
+      </div>
+      <button type="button" id="btn-cancel-new-model" class="btn-secondary">Cancelar</button>
     </div>
-    <div id="asset-grid">
-      <div class="loader">A sincronizar dados...</div>
+
+    <!-- DADOS ESPECÍFICOS -->
+    <div style="margin-top:20px;">
+      <div id="group-ip" style="display:none;" class="input-group">
+        <label>Endereço IP</label>
+        <input type="text" id="f-ip" placeholder="0.0.0.0">
+      </div>
+      <div class="input-group"><label>Hostname</label><input type="text" id="f-hostname" placeholder="Nome na Rede"></div>
+      <div class="input-group"><label>Sala / Setor</label><input type="text" id="f-setor" placeholder="Ex: Sala 102"></div>
     </div>
+    
+    <button type="button" class="btn-primary" id="btn-save-equipment">GUARDAR EQUIPAMENTO</button>
+  </div>
+
+  <!-- VIEW: INVENTÁRIO -->
+  <div id="view-inventory" class="view-section">
+    <div class="filter-scroll" id="cat-chips"></div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+      <input type="text" id="search-input" placeholder="Pesquisar...">
+      <select id="filter-room"><option value="ALL">Todas as Salas</option></select>
+    </div>
+    <div id="asset-grid"></div>
   </div>
 </main>
 
 <nav>
-  <button type="button" class="nav-btn active" id="nav-scan" onclick="switchView('scan')">
-    <span class="nav-icon">📷</span>
-    <span>Registar</span>
-  </button>
-  <button type="button" class="nav-btn" id="nav-inventory" onclick="switchView('inventory')">
-    <span class="nav-icon">📋</span>
-    <span>Inventário</span>
-  </button>
+  <button type="button" class="nav-btn active" id="nav-reg-btn">📷<span>Registar</span></button>
+  <button type="button" class="nav-btn" id="nav-inv-btn">📋<span>Inventário</span></button>
 </nav>
 
-<div class="overlay" id="modal-overlay">
+<!-- MODAL -->
+<div class="overlay" id="overlay">
   <div class="modal">
     <h3 id="modal-title">Confirmar</h3>
-    <p id="modal-desc">Tem a certeza?</p>
-    <div class="modal-btns">
-      <button type="button" class="modal-btn btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button type="button" class="modal-btn btn-confirm" id="btn-modal-confirm" onclick="executeDelete()">Eliminar</button>
+    <p id="modal-text" style="margin:15px 0; color:var(--muted); font-size:14px;">Deseja eliminar este item?</p>
+    <div style="display:flex; gap:10px;">
+      <button class="btn-primary" style="background:var(--surface2); color:#fff;" id="btn-modal-cancel">Não</button>
+      <button class="btn-primary" style="background:var(--danger);" id="btn-modal-confirm">Sim, Eliminar</button>
     </div>
   </div>
 </div>
 
 <script>
-// ==================================================
-// LÓGICA DE PROGRAMAÇÃO JAVASCRIPT (MOBILE-FIRST)
-// ==================================================
+/**
+ * LÓGICA DE PROGRAMAÇÃO - VERSÃO STANDALONE (HOSPEDAGEM EXTERNA)
+ */
 
-// LINK ATUALIZADO
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWtBTOBSmEmQsCbZHltImkpJ4fLBT1YOaY0eH8L36Ye_wOxGBLNW1-QBD5rdonNOwY/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxc77s_7bU9OxsvS8Pb80u7wSxrO305EfuvIZa14Ox1b4IPCsTHkJQxwKs5_vSI9f0D/exec";
 
-let STATE = {
-  modelos: [], ativos: [],
-  categoriaAtual: 'TODOS',
-  modoNovoModelo: false,
-  itemParaApagar: null,
-  tipoApagar: 'asset' 
-};
+let DB = { modelos: [], ativos: [], cat: 'TODOS' };
+let TO_DELETE = null;
 
-function initApp() {
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+  setupUI();
   loadData();
+});
+
+function setupUI() {
+  document.getElementById('nav-reg-btn').onclick = () => switchTab('scan');
+  document.getElementById('nav-inv-btn').onclick = () => switchTab('inventory');
+  document.getElementById('btn-sync-header').onclick = loadData;
+  document.getElementById('btn-show-new-model').onclick = () => toggleNewModel(true);
+  document.getElementById('btn-cancel-new-model').onclick = () => toggleNewModel(false);
+  
+  document.getElementById('f-new-type').onchange = updateUIFields;
+  document.getElementById('f-modelo').onchange = updateUIFields;
+  
+  document.getElementById('btn-save-equipment').onclick = save;
+  document.getElementById('search-input').oninput = render;
+  document.getElementById('filter-room').onchange = render;
+
+  document.getElementById('btn-modal-cancel').onclick = () => document.getElementById('overlay').classList.remove('active');
+  document.getElementById('btn-modal-confirm').onclick = executeDelete;
 }
 
-function switchView(view) {
-  document.getElementById('view-scan').classList.toggle('active', view === 'scan');
-  document.getElementById('view-inventory').classList.toggle('active', view === 'inventory');
-  document.getElementById('nav-scan').classList.toggle('active', view === 'scan');
-  document.getElementById('nav-inventory').classList.toggle('active', view === 'inventory');
-  if (view === 'inventory') renderList();
+function switchTab(t) {
+  document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + (t === 'scan' ? 'scan' : 'inventory')).classList.add('active');
+  document.getElementById('nav-' + (t === 'reg-btn' ? 'reg-btn' : 'inv-btn')).classList.add('active'); // Correção de ID
+  document.getElementById('nav-reg-btn').classList.toggle('active', t === 'scan');
+  document.getElementById('nav-inv-btn').classList.toggle('active', t === 'inventory');
+  if(t === 'inventory') render();
 }
 
-function toggleNewModel(forceOpen) {
-  STATE.modoNovoModelo = forceOpen;
-  document.getElementById('block-select-model').style.display = forceOpen ? 'none' : 'block';
-  document.getElementById('block-new-model').style.display = forceOpen ? 'block' : 'none';
-  if (!forceOpen) {
-    document.getElementById('f-new-name').value = '';
-    document.getElementById('f-new-type-select').value = '';
-    handleCategoryChange(); 
-  }
-  updateAssetFieldsVisibility();
+function toggleNewModel(on) {
+  document.getElementById('block-select-model').style.display = on ? 'none' : 'block';
+  document.getElementById('block-new-model').style.display = on ? 'block' : 'none';
+  updateUIFields();
 }
 
-function checkTrashButton() {
+function updateUIFields() {
   const modelId = document.getElementById('f-modelo').value;
-  document.getElementById('btn-delete-model').style.display = (modelId && modelId !== "") ? 'flex' : 'none';
-}
-
-function handleCategoryChange() {
-  const select = document.getElementById('f-new-type-select').value;
-  const isCustom = select === 'Outro';
-  document.getElementById('group-custom-type').style.display = isCustom ? 'block' : 'none';
+  document.getElementById('btn-delete-model-trigger').style.display = modelId ? 'block' : 'none';
   
-  const finalCat = isCustom ? document.getElementById('f-new-type-custom').value.toLowerCase() : select.toLowerCase();
-  
-  const showSpecs = finalCat.includes('computador') || finalCat.includes('portátil') || finalCat.includes('notebook') || finalCat.includes('pc') || finalCat.includes('servidor');
-  document.getElementById('group-specs').style.display = showSpecs ? 'block' : 'none';
-
-  const isReceptor = finalCat.includes('receptor de microfone');
-  document.getElementById('group-mic').style.display = isReceptor ? 'block' : 'none';
-
-  const isToner = finalCat === 'toner';
-  document.getElementById('group-toner').style.display = isToner ? 'block' : 'none';
-}
-
-function updateAssetFieldsVisibility() {
   let cat = "";
-  if (STATE.modoNovoModelo) {
-    cat = getFinalCategory().toLowerCase();
+  if (document.getElementById('block-new-model').style.display === 'block') {
+    cat = document.getElementById('f-new-type').value.toLowerCase();
   } else {
-    const selMod = document.getElementById('f-modelo').value;
-    const model = STATE.modelos.find(m => m.id == selMod);
-    if (model) cat = (model.tipo || "").toLowerCase();
+    const m = DB.modelos.find(x => String(x.id) === String(modelId));
+    cat = m ? String(m.tipo).toLowerCase() : "";
   }
-
-  const showIP = cat.includes('access point') || cat.includes('servidor') || cat.includes('computador') || cat.includes('router') || cat.includes('switch') || cat.includes('impressora');
-  document.getElementById('group-ip').style.display = showIP ? 'block' : 'none';
-}
-
-function getFinalCategory() {
-  const select = document.getElementById('f-new-type-select').value;
-  if (select === 'Outro') return document.getElementById('f-new-type-custom').value.trim();
-  return select;
-}
-
-function suggestId(name) {
-  const idField = document.getElementById('f-new-id');
-  idField.value = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, ''); 
+  
+  const isNet = cat.includes('access') || cat.includes('impressora') || cat.includes('computador') || cat.includes('notebook') || cat.includes('servidor');
+  document.getElementById('group-ip').style.display = isNet ? 'block' : 'none';
 }
 
 async function loadData() {
   const grid = document.getElementById('asset-grid');
-  grid.innerHTML = '<div class="loader">A sincronizar com a base de dados...</div>';
-  
+  grid.innerHTML = '<div class="loader">A sincronizar com a nuvem...</div>';
   try {
-    const res = await fetch(SCRIPT_URL + "?action=getAll");
+    const res = await fetch(API_URL + "?action=getAll");
     const data = await res.json();
-    STATE.modelos = data.modelos || [];
-    STATE.ativos = data.ativos || [];
-    
+    DB.modelos = data.modelos || [];
+    DB.ativos = data.ativos || [];
     updateSelectors();
-    renderList();
-  } catch (err) {
-    grid.innerHTML = `<div class="loader" style="color:var(--danger)"><b>⚠️ Erro de Ligação</b></div>`;
+    render();
+  } catch (e) {
+    grid.innerHTML = `<div class="loader" style="color:var(--danger)">⚠️ Erro de Ligação. Verifique se a Implantação do Google está como 'Qualquer pessoa'.</div>`;
   }
 }
 
 function updateSelectors() {
-  const selMod = document.getElementById('f-modelo');
-  const currentMod = selMod.value;
-  selMod.options.length = 0;
-  selMod.add(new Option("Selecione o modelo...", ""));
-  STATE.modelos.forEach(m => selMod.add(new Option(m.nome, m.id)));
-  selMod.value = currentMod;
-  checkTrashButton();
-  updateAssetFieldsVisibility();
+  const sel = document.getElementById('f-modelo');
+  const cur = sel.value;
+  sel.options.length = 0; sel.add(new Option("Selecione o modelo...", ""));
+  DB.modelos.forEach(m => sel.add(new Option(m.nome, m.id)));
+  sel.value = cur;
 
-  const selRoom = document.getElementById('filter-room');
-  const currentRoom = selRoom.value;
-  selRoom.options.length = 0;
-  selRoom.add(new Option("Todas as Salas", "ALL"));
-  const rooms = [...new Set(STATE.ativos.map(a => a.setor).filter(Boolean))].sort();
-  rooms.forEach(r => selRoom.add(new Option(r, r)));
-  selRoom.value = currentRoom || "ALL";
+  const rSel = document.getElementById('filter-room');
+  const old = rSel.value;
+  rSel.options.length = 0; rSel.add(new Option("Todas as Salas", "ALL"));
+  [...new Set(DB.ativos.map(a => String(a.setor || "")))].filter(s => s && s !== "undefined").sort().forEach(r => rSel.add(new Option(r, r)));
+  rSel.value = old || "ALL";
 
-  const chipsDiv = document.getElementById('category-chips');
-  chipsDiv.innerHTML = `<button type="button" class="chip ${STATE.categoriaAtual === 'TODOS' ? 'active' : ''}" onclick="setCategory('TODOS')">Todos</button>`;
-  const cats = [...new Set(STATE.modelos.map(m => m.tipo).filter(Boolean))].sort();
-  cats.forEach(c => {
-    chipsDiv.innerHTML += `<button type="button" class="chip ${STATE.categoriaAtual === c ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`;
+  const chips = document.getElementById('cat-chips');
+  chips.innerHTML = `<button class="chip ${DB.cat === 'TODOS' ? 'active' : ''}" onclick="setCategory('TODOS')">Todos</button>`;
+  [...new Set(DB.modelos.map(m => String(m.tipo || "")))].filter(t => t && t !== "undefined").sort().forEach(c => {
+    chips.innerHTML += `<button class="chip ${DB.cat === c ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`;
   });
 }
 
-window.setCategory = function(cat) {
-  STATE.categoriaAtual = cat;
-  updateSelectors(); 
-  renderList();
-};
+window.setCategory = (c) => { DB.cat = c; updateSelectors(); render(); };
 
-async function saveEquipment() {
+async function save() {
+  const btn = document.getElementById('btn-save-equipment');
+  const isNew = document.getElementById('block-new-model').style.display === 'block';
+  const mid = isNew ? document.getElementById('f-new-name').value.toLowerCase().replace(/\s+/g,'_') : document.getElementById('f-modelo').value;
+  
+  if(!mid || !document.getElementById('f-serial').value) return alert("Erro: Série e Modelo são obrigatórios!");
+
   const payload = {
-    serial: document.getElementById('f-serial').value.trim(),
-    hostname: document.getElementById('f-hostname').value.trim(),
-    setor: document.getElementById('f-setor').value.trim(),
-    ip: document.getElementById('f-ip').value.trim(), 
-    isNovoModelo: STATE.modoNovoModelo,
-    modeloid: STATE.modoNovoModelo ? document.getElementById('f-new-id').value : document.getElementById('f-modelo').value,
-    nomeModelo: document.getElementById('f-new-name').value.trim(),
-    tipo: getFinalCategory() || "Equipamento",
-    icon: document.getElementById('f-new-icon').value.trim() || "📦",
-    cpu: document.getElementById('f-new-cpu').value.trim(),
-    ram: document.getElementById('f-new-ram').value.trim(),
-    storage: document.getElementById('f-new-storage').value.trim(),
-    miccount: document.getElementById('f-new-mic-count').value.trim(),
-    tonercolor: document.getElementById('f-new-toner-color') ? document.getElementById('f-new-toner-color').value.trim() : "",
-    tonerprinter: document.getElementById('f-new-toner-printer') ? document.getElementById('f-new-toner-printer').value.trim() : ""
+    serial: document.getElementById('f-serial').value,
+    qtd: document.getElementById('f-qtd').value,
+    modeloid: mid,
+    isNovoModelo: isNew,
+    nomeModelo: document.getElementById('f-new-name').value,
+    tipo: document.getElementById('f-new-type').value,
+    icon: document.getElementById('f-icon').value,
+    ip: document.getElementById('f-ip').value,
+    hostname: document.getElementById('f-hostname').value,
+    setor: document.getElementById('f-setor').value
   };
 
-  const qtd = parseInt(document.getElementById('f-qtd').value) || 1;
-
-  if (!payload.serial && qtd === 1) return alert("O Património é obrigatório!");
-  if (!payload.modeloid || (payload.isNovoModelo && !payload.nomeModelo)) return alert("Selecione um modelo!");
-
-  const btn = document.getElementById('btn-save');
   btn.innerText = "A GUARDAR..."; btn.disabled = true;
-
   try {
-    for (let i = 0; i < qtd; i++) {
-      let currentPayload = { ...payload };
-      if (qtd > 1 && currentPayload.serial) {
-        currentPayload.serial = `${currentPayload.serial} - (${i + 1}/${qtd})`;
-      }
-      if (i > 0) currentPayload.isNovoModelo = false;
-      await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(currentPayload) });
-    }
-    alert("Registado com sucesso!");
+    // Usamos no-cors para evitar problemas de pré-verificação do navegador
+    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+    alert("Equipamento registado!");
     resetForm();
     await loadData();
-    switchView('inventory');
+    switchTab('inventory');
   } catch (e) {
     alert("Erro de rede.");
   } finally {
@@ -507,96 +368,75 @@ async function saveEquipment() {
 }
 
 function resetForm() {
-  ['f-serial', 'f-hostname', 'f-setor', 'f-ip', 'f-modelo', 'f-new-name', 'f-new-id', 'f-new-type-select', 'f-new-type-custom', 'f-new-cpu', 'f-new-ram', 'f-new-storage', 'f-new-mic-count', 'f-new-toner-color', 'f-new-toner-printer'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.value = "";
-  });
-  document.getElementById('f-new-icon').value = "📦";
+  ['f-serial', 'f-hostname', 'f-setor', 'f-ip', 'f-new-name'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('f-qtd').value = "1";
   toggleNewModel(false);
 }
 
-function renderList() {
+function formatImg(url) {
+  if(!url || typeof url !== 'string' || !url.startsWith('http')) return url || "📦";
+  if(url.includes('drive.google.com')){
+    const id = url.match(/\/d\/([^/]+)/) || url.match(/id=([^&]+)/);
+    if(id) return `https://drive.google.com/uc?export=view&id=${id[1]}`;
+  }
+  return url;
+}
+
+function render() {
   const grid = document.getElementById('asset-grid');
-  const q = document.getElementById('search-input').value.toLowerCase();
+  const q = (document.getElementById('search-input').value || "").toLowerCase();
   const room = document.getElementById('filter-room').value;
 
-  let filtered = STATE.ativos.filter(a => {
-    const m = STATE.modelos.find(mod => String(mod.id) === String(a.modeloid)) || {};
-    const catMatch = STATE.categoriaAtual === 'TODOS' || m.tipo === STATE.categoriaAtual;
-    const roomMatch = room === 'ALL' || a.setor === room;
-    const textMatch = (a.serial||"").toLowerCase().includes(q) || (a.hostname||"").toLowerCase().includes(q) || (m.nome||"").toLowerCase().includes(q) || (a.ip||"").toLowerCase().includes(q);
-    return catMatch && roomMatch && textMatch;
+  const filtered = DB.ativos.filter(a => {
+    const m = DB.modelos.find(x => String(x.id) === String(a.modeloid)) || {};
+    const text = (String(a.serial||"") + String(a.hostname||"") + String(m.nome||"") + String(a.ip||"")).toLowerCase();
+    const matchCat = DB.cat === 'TODOS' || String(m.tipo) === DB.cat;
+    const matchRoom = room === 'ALL' || String(a.setor) === room;
+    return matchCat && matchRoom && text.includes(q);
   });
 
-  if (filtered.length === 0) {
-    grid.innerHTML = '<div class="loader">Nenhum equipamento encontrado.</div>';
-    return;
-  }
+  if(!filtered.length) { grid.innerHTML = '<div class="loader">Nenhum equipamento encontrado.</div>'; return; }
 
   grid.innerHTML = filtered.reverse().map(a => {
-    const m = STATE.modelos.find(mod => String(mod.id) === String(a.modeloid)) || {};
-    let specs = `<div class="spec-row">
-      ${m.cpu ? `<span class="spec-badge">⚙️ ${m.cpu}</span>` : ''}
-      ${m.ram ? `<span class="spec-badge">🧠 ${m.ram}</span>` : ''}
-      ${m.storage ? `<span class="spec-badge">💾 ${m.storage}</span>` : ''}
-      ${m.miccount ? `<span class="spec-badge">🎤 ${m.miccount} Mic(s)</span>` : ''}
-      ${m.tonercolor ? `<span class="spec-badge">💧 Cor: ${m.tonercolor}</span>` : ''}
-      ${m.tonerprinter ? `<span class="spec-badge">🖨️ Para: ${m.tonerprinter}</span>` : ''}
-      ${a.ip ? `<span class="spec-badge" style="background:#1a3d27; color:var(--accent);">🌐 ${a.ip}</span>` : ''}
-    </div>`;
-
+    const m = DB.modelos.find(x => String(x.id) === String(a.modeloid)) || {};
+    const img = formatImg(m.icon || m.foto);
+    const visual = img.startsWith('http') ? `<img src="${img}" onerror="this.outerHTML='<span>📦</span>'">` : `<span>${img}</span>`;
+    
     return `
       <div class="card">
-        <button type="button" class="delete-btn" onclick="promptDeleteAsset('${a.id}')">✕</button>
-        <div class="card-title">${m.nome || 'Desconhecido'}</div>
-        <div class="card-sub">${m.tipo || 'Equipamento'}</div>
-        <div style="margin-bottom: 12px;"><span class="badge">${a.setor || 'Sem Sala'}</span></div>
-        ${specs}
-        <div class="data-grid">
-          <div class="data-col"><span class="data-lbl">SÉRIE/PAT.</span><span class="data-val">${a.serial}</span></div>
-          <div class="data-col"><span class="data-lbl">HOSTNAME</span><span class="data-val">${a.hostname || '--'}</span></div>
+        <button class="delete-btn" onclick="askDelete('asset','${a.id}')">✕</button>
+        <div class="card-img">${visual}</div>
+        <div class="card-content">
+          <div class="card-title">${m.nome || 'Desconhecido'}</div>
+          <div class="card-sub">${m.tipo || 'ATIVO'}</div>
+          <div class="badge">${a.setor || 'Sem Sala'}</div>
+          <div style="margin-bottom:10px;">
+            ${a.ip ? `<span class="spec-badge" style="color:var(--accent)">🌐 ${a.ip}</span>` : ''}
+          </div>
+          <div class="data-grid">
+            <div><div class="data-lbl">SÉRIE</div><div class="data-val">${a.serial}</div></div>
+            <div><div class="data-lbl">HOST / NOME</div><div class="data-val">${a.hostname || '--'}</div></div>
+          </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
-window.promptDeleteAsset = function(id) {
-  STATE.itemParaApagar = id;
-  STATE.tipoApagar = 'asset';
-  document.getElementById('modal-overlay').classList.add('active');
+window.askDelete = (type, id) => { 
+  TO_DELETE = {type, id}; 
+  document.getElementById('overlay').classList.add('active'); 
 };
 
-function promptDeleteModel() {
-  const sel = document.getElementById('f-modelo');
-  if(!sel.value) return;
-  STATE.itemParaApagar = sel.value;
-  STATE.tipoApagar = 'model';
-  document.getElementById('modal-overlay').classList.add('active');
-}
-
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('active');
-  STATE.itemParaApagar = null;
-}
-
 async function executeDelete() {
+  if(!TO_DELETE) return;
   const btn = document.getElementById('btn-modal-confirm');
-  btn.innerText = "A aguardar..."; btn.disabled = true;
+  btn.innerText = "A ELIMINAR...";
   try {
-    const action = STATE.tipoApagar === 'model' ? 'delete_model' : 'delete';
-    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: action, id: STATE.itemParaApagar }) });
+    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', id: TO_DELETE.id }) });
+    document.getElementById('overlay').classList.remove('active');
     await loadData();
-    closeModal();
-  } catch (e) {
-    alert("Erro.");
-  } finally {
-    btn.innerText = "Eliminar"; btn.disabled = false;
-  }
+  } catch (e) { alert("Erro."); } finally { btn.innerText = "Sim, Eliminar"; }
 }
-
-document.addEventListener('DOMContentLoaded', initApp);
 </script>
 </body>
 </html>
