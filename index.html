@@ -58,9 +58,7 @@
   .chip.active { background: rgba(48, 209, 88, 0.15); color: var(--accent); border-color: var(--accent); }
   
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 16px; overflow: hidden; position: relative;}
-  .card-img { width: 100%; height: 180px; background: #000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); }
-  .card-img img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
-  .card-img span { font-size: 64px; }
+  .card-img { width: 100%; height: 120px; background: #000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); font-size: 50px; }
   
   .card-content { padding: 16px; }
   .card-title { font-weight: 600; font-size: 18px; margin-bottom: 4px; }
@@ -152,7 +150,7 @@
       </div>
 
       <div class="input-group">
-        <label>Foto (Link ou Emoji)</label>
+        <label>Emoji de Ícone</label>
         <input type="text" id="f-icon" value="📦">
       </div>
       <button class="btn-secondary" id="cancel-new-mod-btn">Cancelar</button>
@@ -236,6 +234,7 @@
     updateUI();
   }
 
+  // Lógica de UI Corrigida
   function updateUI() {
     const isNew = document.getElementById('new-model-block').style.display === 'block';
     let cat = "";
@@ -249,21 +248,22 @@
       document.getElementById('del-mod-btn').style.display = mid ? 'block' : 'none';
     }
 
-    // Campo "Outro"
-    document.getElementById('other-block').style.display = cat === 'outro' ? 'block' : 'none';
+    // Mostrar Campo Especial para categoria "Outro"
+    document.getElementById('other-block').style.display = (isNew && cat === 'outro') ? 'block' : 'none';
 
     // Mostrar blocos específicos
     document.getElementById('specs-block').style.display = (cat.includes('computador') || cat.includes('notebook')) ? 'block' : 'none';
     document.getElementById('toner-block').style.display = cat.includes('toner') ? 'block' : 'none';
     document.getElementById('mic-block').style.display = cat.includes('receptor') ? 'block' : 'none';
     
+    // Mostrar campo IP para ativos de rede ou "Outro"
     const isNet = cat === 'outro' || cat.includes('access') || cat.includes('impressora') || cat.includes('computador') || cat.includes('notebook') || cat.includes('servidor') || cat.includes('switch') || cat.includes('router');
     document.getElementById('ip-block').style.display = isNet ? 'block' : 'none';
   }
 
   async function load() {
     const list = document.getElementById('list-container');
-    list.innerHTML = '<div class="loader">A atualizar inventário...</div>';
+    list.innerHTML = '<div class="loader">A carregar dados...</div>';
     try {
       const res = await fetch(API_URL + "?action=getAll");
       const data = await res.json();
@@ -272,7 +272,7 @@
       updateSelectors();
       render();
     } catch (e) {
-      list.innerHTML = '<div class="loader" style="color:var(--danger)">Erro de ligação.</div>';
+      list.innerHTML = '<div class="loader" style="color:var(--danger)">Erro ao carregar banco de dados.</div>';
     }
   }
 
@@ -302,18 +302,18 @@
   async function save() {
     const btn = document.getElementById('save-btn');
     const isNew = document.getElementById('new-model-block').style.display === 'block';
-    
     const nameInput = document.getElementById('f-new-name').value;
     
-    // O ID é gerado automaticamente a partir do nome se for novo
+    // Gerar ID Automático consistente
     const mid = isNew 
       ? nameInput.toLowerCase().trim().replace(/\s+/g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
       : document.getElementById('f-modelo').value;
     
     if(!mid || !document.getElementById('f-serial').value) return alert("Erro: Série e Modelo são obrigatórios!");
 
+    // Tratar categoria final (se for outro, pega o texto digitado)
     const selectedType = document.getElementById('f-new-type').value;
-    const finalType = selectedType === 'Outro' ? document.getElementById('f-other-type').value : selectedType;
+    const finalType = (selectedType === 'Outro' && isNew) ? document.getElementById('f-other-type').value : selectedType;
 
     const payload = {
       serial: document.getElementById('f-serial').value,
@@ -337,9 +337,9 @@
     btn.innerText = "A GUARDAR..."; btn.disabled = true;
     try {
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-      alert("Equipamento registado!");
+      alert("Sucesso! Item guardado.");
       resetForm();
-      setTimeout(load, 2000);
+      setTimeout(load, 1500);
       showView('inventory');
     } catch (e) { alert("Erro de rede."); } finally { btn.innerText = "GUARDAR EQUIPAMENTO"; btn.disabled = false; }
   }
@@ -353,42 +353,30 @@
     toggleNewMod(false);
   }
 
-  function formatImg(url) {
-    if(!url || typeof url !== 'string') return "📦";
-    const cleanUrl = url.trim();
-    if(!cleanUrl.startsWith('http')) return cleanUrl;
-    if(cleanUrl.includes('drive.google.com')){
-      const id = cleanUrl.match(/\/d\/([^/]+)/) || cleanUrl.match(/id=([^&]+)/);
-      if(id) return `https://drive.google.com/uc?export=view&id=${id[1]}`;
-    }
-    return cleanUrl;
-  }
-
   function render() {
     const grid = document.getElementById('list-container');
     const q = (document.getElementById('search').value || "").toLowerCase();
     const r = document.getElementById('filter-room').value;
 
     const filtered = DB.ativos.filter(a => {
+      // Busca segura e robusta do modelo para evitar "Desconhecido"
       const modelID = String(a.modeloid || "").trim().toLowerCase();
       const m = DB.modelos.find(x => String(x.id).trim().toLowerCase() === modelID) || {};
+      
       const text = (String(a.serial||"") + String(a.hostname||"") + String(m.nome||"") + String(a.ip||"")).toLowerCase();
       const matchCat = DB.cat === 'TODOS' || String(m.tipo).toUpperCase() === DB.cat.toUpperCase();
       const matchRoom = r === 'ALL' || String(a.setor) === r;
       return matchCat && matchRoom && text.includes(q);
     });
 
-    if(!filtered.length) { grid.innerHTML = '<div class="loader">Nenhum equipamento encontrado.</div>'; return; }
+    if(!filtered.length) { grid.innerHTML = '<div class="loader">Nada encontrado.</div>'; return; }
 
     grid.innerHTML = filtered.reverse().map(a => {
       const modelID = String(a.modeloid || "").trim().toLowerCase();
       const m = DB.modelos.find(x => String(x.id).trim().toLowerCase() === modelID) || {};
       
-      const imgUrl = formatImg(m.icon || m.foto);
-      const isUrl = imgUrl.startsWith('http');
-      const visual = isUrl 
-        ? `<img src="${imgUrl}" referrerpolicy="no-referrer" alt="Foto" onerror="this.onerror=null; this.parentElement.innerHTML='<span>⚠️</span>';">` 
-        : `<span>${imgUrl || '📦'}</span>`;
+      // Apenas emoji ou ícone de texto
+      const icon = m.icon || '📦';
       
       let specs = [];
       if(m.cpu) specs.push(`⚙️ ${m.cpu}`);
@@ -402,15 +390,15 @@
       return `
         <div class="card">
           <button class="delete-btn" onclick="askDelete('asset','${a.id}')">✕</button>
-          <div class="card-img">${visual}</div>
+          <div class="card-img"><span>${icon}</span></div>
           <div class="card-content">
-            <div class="card-title">${m.nome || 'Modelo Desconhecido'}</div>
+            <div class="card-title">${m.nome || 'Erro: ID Não Encontrado'}</div>
             <div class="card-sub">${m.tipo || 'ATIVO'}</div>
-            <div class="badge">${a.setor || 'Sem Sala'}</div>
+            <div class="badge">${a.setor || 'Sem Localização'}</div>
             <div style="margin-top:8px; display: flex; flex-wrap: wrap;">${specs.map(s => `<span class="spec-badge">${s}</span>`).join('')}</div>
             <div class="data-grid">
-              <div><div class="data-lbl">SÉRIE</div><div>${a.serial}</div></div>
-              <div><div class="data-lbl">HOST / NOME</div><div>${a.hostname || '--'}</div></div>
+              <div><div class="data-lbl">SERIAL</div><div>${a.serial}</div></div>
+              <div><div class="data-lbl">HOSTNAME</div><div>${a.hostname || '--'}</div></div>
             </div>
           </div>
         </div>`;
@@ -429,7 +417,7 @@
     try {
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', id: TO_DELETE.id }) });
       document.getElementById('overlay').classList.remove('active');
-      setTimeout(load, 1500);
+      setTimeout(load, 1000);
     } catch (e) { alert("Erro ao eliminar."); } finally { btn.innerText = "Sim, Eliminar"; }
   }
 </script>
