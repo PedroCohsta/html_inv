@@ -58,24 +58,23 @@
   .chip.active { background: rgba(48, 209, 88, 0.15); color: var(--accent); border-color: var(--accent); }
   
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 16px; overflow: hidden; position: relative;}
-  .card-img { width: 100%; height: 120px; background: #000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); font-size: 50px; }
+  .card-img { width: 100%; height: 90px; background: #000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); font-size: 40px; }
   
   .card-content { padding: 16px; }
-  .card-title { font-weight: 600; font-size: 18px; margin-bottom: 4px; }
-  .card-sub { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; font-family: var(--mono); }
-  .badge { background: var(--surface2); padding: 4px 10px; border-radius: 6px; font-size: 12px; color: var(--accent); border: 1px solid var(--border); display: inline-block; }
+  .card-title { font-weight: 600; font-size: 17px; margin-bottom: 2px; color: #fff; }
+  .card-sub { font-size: 10px; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; font-family: var(--mono); }
+  .badge { background: var(--surface2); padding: 4px 10px; border-radius: 6px; font-size: 11px; color: var(--accent); border: 1px solid var(--border); display: inline-block; }
   
-  .spec-badge { background: #1c1c1e; color: #8e8e93; font-size: 10px; padding: 4px 8px; border-radius: 6px; font-family: var(--mono); border: 1px solid var(--border); margin: 0 4px 4px 0; display: inline-block; }
+  .spec-badge { background: #1c1c1e; color: #8e8e93; font-size: 9px; padding: 3px 7px; border-radius: 5px; font-family: var(--mono); border: 1px solid var(--border); margin: 0 4px 4px 0; display: inline-block; }
   
-  .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--mono); font-size: 12px; background: #000; padding: 12px; border-radius: 8px; margin-top: 10px; }
-  .data-lbl { color: var(--muted); font-size: 9px; margin-bottom: 2px; text-transform: uppercase; }
+  .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--mono); font-size: 11px; background: #000; padding: 10px; border-radius: 8px; margin-top: 10px; }
+  .data-lbl { color: var(--muted); font-size: 8px; margin-bottom: 1px; text-transform: uppercase; }
   
-  .delete-btn { position: absolute; top: 12px; right: 12px; background: rgba(255,69,58,0.2); color: var(--danger); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; z-index: 5; }
+  .delete-btn { position: absolute; top: 12px; right: 12px; background: rgba(255,69,58,0.2); color: var(--danger); border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 5; font-size: 14px;}
   
   .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
   .overlay.active { display: flex; }
-  .modal { background: var(--surface); width: 90%; max-width: 350px; border-radius: 20px; padding: 24px; text-align: center; }
-  .loader { text-align: center; color: var(--muted); padding: 40px; font-size: 14px; }
+  .modal { background: var(--surface); width: 90%; max-width: 320px; border-radius: 20px; padding: 20px; text-align: center; }
 </style>
 </head>
 <body>
@@ -89,14 +88,14 @@
   <!-- ABA REGISTO -->
   <div id="view-scan" class="view-section active">
     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 16px;">
-      <div><label>Série / Património</label><input type="text" id="f-serial" placeholder="Digite o serial"></div>
-      <div><label>Qtd.</label><input type="number" id="f-qtd" value="1" min="1"></div>
+      <div><label>Série / Património</label><input type="text" id="f-serial" placeholder="Serial"></div>
+      <div><label>Qtd.</label><input type="number" id="f-qtd" value="1"></div>
     </div>
 
     <div id="model-select-block">
       <label>Modelo do Equipamento</label>
       <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-        <select id="f-modelo" style="flex: 1;"><option value="">A carregar modelos...</option></select>
+        <select id="f-modelo" style="flex: 1;"><option value="">A carregar...</option></select>
         <button id="del-mod-btn" style="display:none; background:none; border:none; font-size:18px;">🗑️</button>
       </div>
       <button class="btn-secondary" id="show-new-mod-btn">+ Adicionar Novo Modelo</button>
@@ -104,7 +103,7 @@
 
     <!-- CRIAR NOVO MODELO -->
     <div id="new-model-block" style="display:none; background: rgba(48,209,88,0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(48,209,88,0.2);">
-      <div class="input-group"><label>Nome do Modelo</label><input type="text" id="f-new-name" placeholder="Ex: Dell Precision 3560"></div>
+      <div class="input-group"><label>Nome do Modelo</label><input type="text" id="f-new-name" placeholder="Ex: Dell Latitude 3420"></div>
       
       <div class="input-group">
         <label>Categoria</label>
@@ -120,50 +119,40 @@
         </select>
       </div>
 
-      <!-- Campo Especial para "Outro" -->
+      <!-- Campo para Categoria Customizada (Outro) -->
       <div id="other-block" style="display:none;" class="input-group">
-        <label style="color: var(--accent);">Especificar Categoria</label>
-        <input type="text" id="f-other-type" placeholder="Ex: Switch, Roteador, Hub...">
+        <label style="color: var(--accent);">Qual é o tipo?</label>
+        <input type="text" id="f-other-type" placeholder="Ex: Switch, Mouse, Hub...">
       </div>
 
-      <!-- Detalhes Dinâmicos -->
       <div id="specs-block" style="display:none;" class="input-group">
         <label>Specs (CPU | RAM | SSD)</label>
         <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:5px;">
-          <input type="text" id="f-cpu" placeholder="Ex: i5">
-          <input type="text" id="f-ram" placeholder="16GB">
-          <input type="text" id="f-storage" placeholder="512GB">
+          <input type="text" id="f-cpu" placeholder="i5">
+          <input type="text" id="f-ram" placeholder="8GB">
+          <input type="text" id="f-storage" placeholder="256GB">
         </div>
       </div>
 
       <div id="toner-block" style="display:none;" class="input-group">
-         <label>Cor e Impressora Alvo</label>
+         <label>Cor e Impressora</label>
          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
            <select id="f-t-color"><option value="Preto">Preto</option><option value="Ciano">Ciano</option><option value="Magenta">Magenta</option><option value="Amarelo">Amarelo</option></select>
-           <input type="text" id="f-t-printer" placeholder="Ex: HP M428">
+           <input type="text" id="f-t-printer" placeholder="Impressora alvo">
          </div>
       </div>
 
-      <div id="mic-block" style="display:none;" class="input-group">
-         <label>Canais/Microfones</label>
-         <input type="number" id="f-mic-count" placeholder="Ex: 2">
-      </div>
-
-      <div class="input-group">
-        <label>Emoji de Ícone</label>
-        <input type="text" id="f-icon" value="📦">
-      </div>
+      <div class="input-group"><label>Emoji do Ícone</label><input type="text" id="f-icon" value="📦"></div>
       <button class="btn-secondary" id="cancel-new-mod-btn">Cancelar</button>
     </div>
 
-    <!-- DADOS DO ATIVO -->
     <div style="margin-top:20px;">
       <div id="ip-block" style="display:none;" class="input-group">
-        <label style="color: var(--accent);">Endereço IP</label>
-        <input type="text" id="f-ip" placeholder="192.168.1.100">
+        <label style="color: var(--accent);">IP na Rede</label>
+        <input type="text" id="f-ip" placeholder="0.0.0.0">
       </div>
-      <div class="input-group"><label>Hostname / Nome Rede</label><input type="text" id="f-hostname" placeholder="Ex: PC-SALA-01"></div>
-      <div class="input-group"><label>Sala / Setor</label><input type="text" id="f-setor" placeholder="Ex: Sala 202"></div>
+      <div class="input-group"><label>Hostname</label><input type="text" id="f-hostname" placeholder="Nome na rede"></div>
+      <div class="input-group"><label>Sala / Setor</label><input type="text" id="f-setor" placeholder="Localização"></div>
     </div>
     
     <button class="btn-primary" id="save-btn">GUARDAR EQUIPAMENTO</button>
@@ -181,23 +170,22 @@
 </main>
 
 <nav>
-  <button class="nav-btn active" id="nav-scan">📷<span>Registar</span></button>
+  <button class="nav-btn active" id="nav-scan">📷<span>Registrar</span></button>
   <button class="nav-btn" id="nav-list">📋<span>Inventário</span></button>
 </nav>
 
 <div class="overlay" id="overlay">
   <div class="modal">
-    <h3>Confirmar</h3><p id="m-text" style="margin:15px 0; color:var(--muted); font-size:14px;">Tem a certeza que deseja eliminar?</p>
+    <h3>Confirmar</h3><p style="margin:15px 0; color:var(--muted); font-size:13px;">Eliminar este registo?</p>
     <div style="display:flex; gap:10px;">
       <button class="btn-primary" style="background:var(--surface2); color:#fff;" id="m-cancel">Não</button>
-      <button class="btn-primary" id="m-confirm" style="background:var(--danger);">Sim, Eliminar</button>
+      <button class="btn-primary" id="m-confirm" style="background:var(--danger);">Sim</button>
     </div>
   </div>
 </div>
 
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbwATRzq1Jk-8txTT4CQ8uXLbJhQxu_Ln2IrX--AP_ajL5BxRBWQV7nIMzoz37SvVBZv/exec";
-
   let DB = { modelos: [], ativos: [], cat: 'TODOS' };
   let TO_DELETE = null;
 
@@ -207,16 +195,13 @@
     document.getElementById('sync-btn').onclick = load;
     document.getElementById('show-new-mod-btn').onclick = () => toggleNewMod(true);
     document.getElementById('cancel-new-mod-btn').onclick = () => toggleNewMod(false);
-    
     document.getElementById('f-new-type').onchange = updateUI;
     document.getElementById('f-modelo').onchange = updateUI;
-    
     document.getElementById('save-btn').onclick = save;
     document.getElementById('search').oninput = render;
     document.getElementById('filter-room').onchange = render;
     document.getElementById('m-cancel').onclick = () => document.getElementById('overlay').classList.remove('active');
     document.getElementById('m-confirm').onclick = executeDelete;
-
     load();
   });
 
@@ -234,36 +219,41 @@
     updateUI();
   }
 
-  // Lógica de UI Corrigida
+  // Lógica de UI robusta
   function updateUI() {
     const isNew = document.getElementById('new-model-block').style.display === 'block';
     let cat = "";
     
     if(isNew) {
       cat = document.getElementById('f-new-type').value.toLowerCase();
+      // Mostrar campo customizado se for "Outro"
+      document.getElementById('other-block').style.display = cat === 'outro' ? 'block' : 'none';
     } else {
       const mid = document.getElementById('f-modelo').value;
-      const m = DB.modelos.find(x => String(x.id).trim() === String(mid).trim());
+      const m = findModel(mid);
       cat = m ? String(m.tipo).toLowerCase() : "";
       document.getElementById('del-mod-btn').style.display = mid ? 'block' : 'none';
+      document.getElementById('other-block').style.display = 'none';
     }
 
-    // Mostrar Campo Especial para categoria "Outro"
-    document.getElementById('other-block').style.display = (isNew && cat === 'outro') ? 'block' : 'none';
-
-    // Mostrar blocos específicos
     document.getElementById('specs-block').style.display = (cat.includes('computador') || cat.includes('notebook')) ? 'block' : 'none';
     document.getElementById('toner-block').style.display = cat.includes('toner') ? 'block' : 'none';
-    document.getElementById('mic-block').style.display = cat.includes('receptor') ? 'block' : 'none';
     
-    // Mostrar campo IP para ativos de rede ou "Outro"
-    const isNet = cat === 'outro' || cat.includes('access') || cat.includes('impressora') || cat.includes('computador') || cat.includes('notebook') || cat.includes('servidor') || cat.includes('switch') || cat.includes('router');
+    // IP visível para rede ou se o usuário escrever algo em "Outro"
+    const isNet = cat === 'outro' || cat.includes('access') || cat.includes('impressora') || cat.includes('computador') || cat.includes('notebook') || cat.includes('switch') || cat.includes('router');
     document.getElementById('ip-block').style.display = isNet ? 'block' : 'none';
+  }
+
+  // BUSCA DE MODELO SEM ERRO (Compara ID como String limpa)
+  function findModel(id) {
+    if(!id) return null;
+    const searchId = String(id).trim().toLowerCase();
+    return DB.modelos.find(m => String(m.id).trim().toLowerCase() === searchId);
   }
 
   async function load() {
     const list = document.getElementById('list-container');
-    list.innerHTML = '<div class="loader">A carregar dados...</div>';
+    list.innerHTML = '<div class="loader">A sincronizar inventário...</div>';
     try {
       const res = await fetch(API_URL + "?action=getAll");
       const data = await res.json();
@@ -272,7 +262,7 @@
       updateSelectors();
       render();
     } catch (e) {
-      list.innerHTML = '<div class="loader" style="color:var(--danger)">Erro ao carregar banco de dados.</div>';
+      list.innerHTML = '<div class="loader" style="color:var(--danger)">Erro de ligação.</div>';
     }
   }
 
@@ -284,15 +274,15 @@
     sel.value = old;
 
     const rSel = document.getElementById('filter-room');
-    const oldRoom = rSel.value;
     rSel.options.length = 0; rSel.add(new Option("Todas as Salas", "ALL"));
     [...new Set(DB.ativos.map(a => String(a.setor || "")))].filter(s => s && s !== "undefined").sort().forEach(r => rSel.add(new Option(r, r)));
-    rSel.value = oldRoom || "ALL";
 
     const chips = document.getElementById('cat-chips');
     chips.innerHTML = `<button class="chip ${DB.cat === 'TODOS' ? 'active' : ''}" onclick="setCategory('TODOS')">Todos</button>`;
-    const cats = [...new Set(DB.modelos.map(m => String(m.tipo || "")))].filter(t => t && t !== "undefined").sort();
-    cats.forEach(c => {
+    
+    // Categorias únicas baseadas nos modelos
+    const uniqueCats = [...new Set(DB.modelos.map(m => String(m.tipo || "").trim()))].filter(t => t && t !== "undefined").sort();
+    uniqueCats.forEach(c => {
       chips.innerHTML += `<button class="chip ${DB.cat === c ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`;
     });
   }
@@ -304,14 +294,11 @@
     const isNew = document.getElementById('new-model-block').style.display === 'block';
     const nameInput = document.getElementById('f-new-name').value;
     
-    // Gerar ID Automático consistente
-    const mid = isNew 
-      ? nameInput.toLowerCase().trim().replace(/\s+/g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
-      : document.getElementById('f-modelo').value;
+    // ID Automático baseado no nome ou selecionado
+    const mid = isNew ? nameInput.toLowerCase().trim().replace(/\s+/g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g, "") : document.getElementById('f-modelo').value;
     
     if(!mid || !document.getElementById('f-serial').value) return alert("Erro: Série e Modelo são obrigatórios!");
 
-    // Tratar categoria final (se for outro, pega o texto digitado)
     const selectedType = document.getElementById('f-new-type').value;
     const finalType = (selectedType === 'Outro' && isNew) ? document.getElementById('f-other-type').value : selectedType;
 
@@ -327,8 +314,7 @@
       storage: document.getElementById('f-storage').value,
       tonercolor: document.getElementById('f-t-color').value,
       tonerprinter: document.getElementById('f-t-printer').value,
-      miccount: document.getElementById('f-mic-count').value,
-      icon: document.getElementById('f-icon').value,
+      icon: document.getElementById('f-icon').value || '📦',
       ip: document.getElementById('f-ip').value,
       hostname: document.getElementById('f-hostname').value,
       setor: document.getElementById('f-setor').value
@@ -337,15 +323,15 @@
     btn.innerText = "A GUARDAR..."; btn.disabled = true;
     try {
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-      alert("Sucesso! Item guardado.");
+      alert("Sucesso! Item registado.");
       resetForm();
-      setTimeout(load, 1500);
+      setTimeout(load, 2000);
       showView('inventory');
     } catch (e) { alert("Erro de rede."); } finally { btn.innerText = "GUARDAR EQUIPAMENTO"; btn.disabled = false; }
   }
 
   function resetForm() {
-    ['f-serial', 'f-hostname', 'f-setor', 'f-ip', 'f-new-name', 'f-other-type', 'f-cpu', 'f-ram', 'f-storage', 'f-t-printer', 'f-mic-count'].forEach(id => {
+    ['f-serial', 'f-hostname', 'f-setor', 'f-ip', 'f-new-name', 'f-other-type', 'f-cpu', 'f-ram', 'f-storage', 'f-t-printer'].forEach(id => {
       const el = document.getElementById(id);
       if(el) el.value = '';
     });
@@ -355,36 +341,30 @@
 
   function render() {
     const grid = document.getElementById('list-container');
-    const q = (document.getElementById('search').value || "").toLowerCase();
+    const q = (document.getElementById('search').value || "").toLowerCase().trim();
     const r = document.getElementById('filter-room').value;
 
     const filtered = DB.ativos.filter(a => {
-      // Busca segura e robusta do modelo para evitar "Desconhecido"
-      const modelID = String(a.modeloid || "").trim().toLowerCase();
-      const m = DB.modelos.find(x => String(x.id).trim().toLowerCase() === modelID) || {};
-      
+      const m = findModel(a.modeloid) || {};
       const text = (String(a.serial||"") + String(a.hostname||"") + String(m.nome||"") + String(a.ip||"")).toLowerCase();
-      const matchCat = DB.cat === 'TODOS' || String(m.tipo).toUpperCase() === DB.cat.toUpperCase();
+      
+      // Filtro de categoria ignorando espaços e cases
+      const matchCat = DB.cat === 'TODOS' || String(m.tipo).trim().toLowerCase() === DB.cat.trim().toLowerCase();
       const matchRoom = r === 'ALL' || String(a.setor) === r;
       return matchCat && matchRoom && text.includes(q);
     });
 
-    if(!filtered.length) { grid.innerHTML = '<div class="loader">Nada encontrado.</div>'; return; }
+    if(!filtered.length) { grid.innerHTML = '<div class="loader">Nenhum equipamento nesta categoria.</div>'; return; }
 
     grid.innerHTML = filtered.reverse().map(a => {
-      const modelID = String(a.modeloid || "").trim().toLowerCase();
-      const m = DB.modelos.find(x => String(x.id).trim().toLowerCase() === modelID) || {};
-      
-      // Apenas emoji ou ícone de texto
+      const m = findModel(a.modeloid) || {};
       const icon = m.icon || '📦';
       
       let specs = [];
       if(m.cpu) specs.push(`⚙️ ${m.cpu}`);
       if(m.ram) specs.push(`🧠 ${m.ram}`);
       if(m.storage) specs.push(`💾 ${m.storage}`);
-      if(m.miccount) specs.push(`🎤 ${m.miccount} Mics`);
       if(m.tonercolor) specs.push(`💧 ${m.tonercolor}`);
-      if(m.tonerprinter) specs.push(`🖨️ ${m.tonerprinter}`);
       if(a.ip) specs.push(`🌐 ${a.ip}`);
 
       return `
@@ -392,13 +372,13 @@
           <button class="delete-btn" onclick="askDelete('asset','${a.id}')">✕</button>
           <div class="card-img"><span>${icon}</span></div>
           <div class="card-content">
-            <div class="card-title">${m.nome || 'Erro: ID Não Encontrado'}</div>
-            <div class="card-sub">${m.tipo || 'ATIVO'}</div>
-            <div class="badge">${a.setor || 'Sem Localização'}</div>
-            <div style="margin-top:8px; display: flex; flex-wrap: wrap;">${specs.map(s => `<span class="spec-badge">${s}</span>`).join('')}</div>
+            <div class="card-title">${m.nome || 'Erro: ' + a.modeloid}</div>
+            <div class="card-sub">${m.tipo || 'DESCONHECIDO'}</div>
+            <div class="badge">${a.setor || 'Sem Sala'}</div>
+            <div style="margin-top:8px;">${specs.map(s => `<span class="spec-badge">${s}</span>`).join('')}</div>
             <div class="data-grid">
-              <div><div class="data-lbl">SERIAL</div><div>${a.serial}</div></div>
-              <div><div class="data-lbl">HOSTNAME</div><div>${a.hostname || '--'}</div></div>
+              <div><div class="data-lbl">SÉRIE</div><div>${a.serial}</div></div>
+              <div><div class="data-lbl">HOST</div><div>${a.hostname || '--'}</div></div>
             </div>
           </div>
         </div>`;
@@ -417,8 +397,8 @@
     try {
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', id: TO_DELETE.id }) });
       document.getElementById('overlay').classList.remove('active');
-      setTimeout(load, 1000);
-    } catch (e) { alert("Erro ao eliminar."); } finally { btn.innerText = "Sim, Eliminar"; }
+      setTimeout(load, 1500);
+    } catch (e) { alert("Falha ao eliminar."); } finally { btn.innerText = "Sim"; }
   }
 </script>
 </body>
