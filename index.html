@@ -59,10 +59,14 @@
   
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 16px; overflow: hidden; position: relative;}
   .card-img { width: 100%; height: 180px; background: #000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); }
-  .card-img img { width: 100%; height: 100%; object-fit: contain; }
+  .card-img img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
   .card-img span { font-size: 64px; }
   
   .card-content { padding: 16px; }
+  .card-title { font-weight: 600; font-size: 18px; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+  .badge { background: var(--surface2); padding: 4px 10px; border-radius: 6px; font-size: 12px; color: var(--accent); border: 1px solid var(--border); display: inline-block; }
+  
   .spec-badge { background: #1c1c1e; color: #8e8e93; font-size: 10px; padding: 4px 8px; border-radius: 6px; font-family: var(--mono); border: 1px solid var(--border); margin: 0 4px 4px 0; display: inline-block; }
   
   .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--mono); font-size: 12px; background: #000; padding: 12px; border-radius: 8px; margin-top: 10px; }
@@ -117,7 +121,6 @@
         </select>
       </div>
 
-      <!-- Detalhes Específicos: PC/Notebook -->
       <div id="specs-block" style="display:none;" class="input-group">
         <label>Specs (CPU | RAM | SSD)</label>
         <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:5px;">
@@ -127,7 +130,6 @@
         </div>
       </div>
 
-      <!-- Detalhes Específicos: Toner -->
       <div id="toner-block" style="display:none;" class="input-group">
          <label>Cor e Impressora Alvo</label>
          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
@@ -136,17 +138,19 @@
          </div>
       </div>
 
-      <!-- Detalhes Específicos: Microfone -->
       <div id="mic-block" style="display:none;" class="input-group">
          <label>Qtd Microfones Sem Fio</label>
          <input type="number" id="f-mic-count" placeholder="Ex: 2">
       </div>
 
-      <div class="input-group"><label>Link da Foto ou Emoji</label><input type="text" id="f-icon" value="📦"></div>
+      <div class="input-group">
+        <label>Link da Foto ou Emoji</label>
+        <input type="text" id="f-icon" value="📦">
+        <small style="font-size: 10px; color: var(--muted);">Cole o link da imagem acima para trocar o ícone.</small>
+      </div>
       <button class="btn-secondary" id="cancel-new-mod-btn">Cancelar</button>
     </div>
 
-    <!-- DADOS DO ATIVO -->
     <div style="margin-top:20px;">
       <div id="ip-block" style="display:none;" class="input-group">
         <label style="color: var(--accent);">Endereço IP</label>
@@ -175,7 +179,6 @@
   <button class="nav-btn" id="nav-list">📋<span>Inventário</span></button>
 </nav>
 
-<!-- MODAL ELIMINAÇÃO -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <h3>Confirmar</h3><p id="m-text" style="margin:15px 0; color:var(--muted); font-size:14px;">Tem a certeza que deseja eliminar?</p>
@@ -187,33 +190,22 @@
 </div>
 
 <script>
-  /**
-   * INVENTÁRIO TI GLÓRIA 122 - JAVASCRIPT STANDALONE
-   */
-
   const API_URL = "https://script.google.com/macros/s/AKfycbwATRzq1Jk-8txTT4CQ8uXLbJhQxu_Ln2IrX--AP_ajL5BxRBWQV7nIMzoz37SvVBZv/exec";
 
   let DB = { modelos: [], ativos: [], cat: 'TODOS' };
   let TO_DELETE = null;
 
   document.addEventListener('DOMContentLoaded', () => {
-    // Nav
     document.getElementById('nav-scan').onclick = () => showView('scan');
     document.getElementById('nav-list').onclick = () => showView('inventory');
     document.getElementById('sync-btn').onclick = load;
-
-    // Form
     document.getElementById('show-new-mod-btn').onclick = () => toggleNewMod(true);
     document.getElementById('cancel-new-mod-btn').onclick = () => toggleNewMod(false);
     document.getElementById('f-new-type').onchange = updateUI;
     document.getElementById('f-modelo').onchange = updateUI;
     document.getElementById('save-btn').onclick = save;
-    
-    // Filtros
     document.getElementById('search').oninput = render;
     document.getElementById('filter-room').onchange = render;
-
-    // Modal
     document.getElementById('m-cancel').onclick = () => document.getElementById('overlay').classList.remove('active');
     document.getElementById('m-confirm').onclick = executeDelete;
 
@@ -248,12 +240,10 @@
       document.getElementById('del-mod-btn').style.display = mid ? 'block' : 'none';
     }
 
-    // Campos Dinâmicos conforme categoria
     document.getElementById('specs-block').style.display = (cat.includes('computador') || cat.includes('notebook')) ? 'block' : 'none';
     document.getElementById('toner-block').style.display = cat.includes('toner') ? 'block' : 'none';
     document.getElementById('mic-block').style.display = cat.includes('receptor') ? 'block' : 'none';
     
-    // Campo IP
     const isNet = cat.includes('access') || cat.includes('impressora') || cat.includes('computador') || cat.includes('servidor') || cat.includes('switch') || cat.includes('router');
     document.getElementById('ip-block').style.display = isNet ? 'block' : 'none';
   }
@@ -326,7 +316,7 @@
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
       alert("Equipamento registado!");
       resetForm();
-      setTimeout(load, 1500); // Aguarda o Google atualizar
+      setTimeout(load, 1500);
       showView('inventory');
     } catch (e) {
       alert("Erro de rede.");
@@ -344,13 +334,22 @@
     toggleNewMod(false);
   }
 
+  // FUNÇÃO CORRIGIDA PARA LIDAR COM LINKS DO GOOGLE E EMOJIS
   function formatImg(url) {
-    if(!url || typeof url !== 'string' || !url.startsWith('http')) return url || "📦";
-    if(url.includes('drive.google.com')){
-      const id = url.match(/\/d\/([^/]+)/) || url.match(/id=([^&]+)/);
+    if(!url || typeof url !== 'string') return "📦";
+    
+    const cleanUrl = url.trim();
+    
+    // Se não começar com http, assumimos que é um Emoji ou texto
+    if(!cleanUrl.startsWith('http')) return cleanUrl;
+
+    // Se for Google Drive
+    if(cleanUrl.includes('drive.google.com')){
+      const id = cleanUrl.match(/\/d\/([^/]+)/) || cleanUrl.match(/id=([^&]+)/);
       if(id) return `https://drive.google.com/uc?export=view&id=${id[1]}`;
     }
-    return url;
+    
+    return cleanUrl;
   }
 
   function render() {
@@ -370,8 +369,14 @@
 
     grid.innerHTML = filtered.reverse().map(a => {
       const m = DB.modelos.find(x => String(x.id) === String(a.modeloid)) || {};
-      const img = formatImg(m.icon || m.foto);
-      const visual = img.startsWith('http') ? `<img src="${img}" onerror="this.outerHTML='<span>📦</span>'">` : `<span>${img}</span>`;
+      const rawImg = m.icon || m.foto;
+      const imgUrl = formatImg(rawImg);
+      
+      // LOGICA DE RENDERIZAÇÃO DA IMAGEM MELHORADA
+      const isUrl = imgUrl.startsWith('http');
+      const visual = isUrl 
+        ? `<img src="${imgUrl}" alt="Foto" onerror="this.onerror=null; this.parentElement.innerHTML='<span>⚠️</span>';">` 
+        : `<span>${imgUrl || '📦'}</span>`;
       
       let specs = [];
       if(m.cpu) specs.push(`⚙️ ${m.cpu}`);
@@ -390,7 +395,7 @@
             <div class="card-title">${m.nome || 'Desconhecido'}</div>
             <div class="card-sub">${m.tipo || 'ATIVO'}</div>
             <div class="badge">${a.setor || 'Sem Sala'}</div>
-            <div style="margin-top:4px;">${specs.map(s => `<span class="spec-badge">${s}</span>`).join('')}</div>
+            <div style="margin-top:8px; display: flex; flex-wrap: wrap;">${specs.map(s => `<span class="spec-badge">${s}</span>`).join('')}</div>
             <div class="data-grid">
               <div><div class="data-lbl">SÉRIE</div><div>${a.serial}</div></div>
               <div><div class="data-lbl">HOST / NOME</div><div>${a.hostname || '--'}</div></div>
