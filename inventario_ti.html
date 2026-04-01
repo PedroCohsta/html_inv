@@ -2,601 +2,601 @@
 <html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Inventário TI Glória 122</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0f0f0f; 
-    --surface: #161616; 
-    --surface2: #1e1e1e; 
-    --border: #2a2a2a;
-    --text: #e8e8e8; 
-    --muted: #777; 
-    --accent: #4ade80; 
-    --danger: #ef4444;
-    --warn: #fbbf24;
-    --font: 'IBM Plex Sans', sans-serif;
+    --surface: #1c1c1e; 
+    --surface2: #2c2c2e; 
+    --border: #38383a;
+    --text: #f5f5f7; 
+    --muted: #8e8e93; 
+    --accent: #30d158; 
+    --danger: #ff453a;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     --mono: 'IBM Plex Mono', monospace;
+    --nav-height: 70px;
   }
   
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   
   body { 
-    background: var(--bg); 
-    color: var(--text); 
-    font-family: var(--font); 
-    line-height: 1.5;
-    min-height: 100vh;
+    background: var(--bg); color: var(--text); font-family: var(--font); 
+    line-height: 1.5; min-height: 100vh; padding-bottom: calc(var(--nav-height) + 20px);
   }
 
-  /* --- CABEÇALHO --- */
   header {
-    background: var(--surface);
-    padding: 15px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background: rgba(28, 28, 30, 0.9);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
     position: sticky; top: 0; z-index: 100;
+    padding-top: max(16px, env(safe-area-inset-top));
   }
-  
-  .logo { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--muted); letter-spacing: 0.1em; }
+  .logo { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--muted); }
   .logo span { color: var(--accent); font-weight: 600; }
+  .btn-sync { background: none; border: none; color: var(--accent); font-size: 20px; padding: 4px; cursor: pointer; }
 
-  /* --- NAVEGAÇÃO PRINCIPAL --- */
   nav {
-    display: flex;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height);
+    background: rgba(28, 28, 30, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border); display: flex; z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
   }
-  
-  /* Transformado em botão nativo para Mobile */
   .nav-btn {
-    flex: 1; padding: 15px; text-align: center;
-    font-size: 12px; font-weight: 600; text-transform: uppercase;
-    color: var(--muted); cursor: pointer; 
-    transition: 0.2s; background: transparent; 
-    border: none; border-bottom: 2px solid transparent; outline: none;
-    font-family: inherit;
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: transparent; border: none; color: var(--muted); font-family: var(--font);
+    font-size: 12px; font-weight: 500; padding: 8px; cursor: pointer; transition: 0.2s;
   }
-  
-  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--surface2); }
+  .nav-btn.active { color: var(--accent); }
+  .nav-icon { font-size: 22px; margin-bottom: 4px; }
 
-  main { padding: 20px; max-width: 1200px; margin: 0 auto; }
-  .hidden { display: none !important; }
+  main { padding: 20px; max-width: 600px; margin: 0 auto; }
+  .view-section { display: none; animation: fadeIn 0.3s ease; }
+  .view-section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* --- FORMULÁRIO DE REGISTO --- */
-  .form-container { 
-    max-width: 500px; margin: 0 auto; background: var(--surface); 
-    padding: 24px; border-radius: 12px; border: 1px solid var(--border); 
-  }
-  
-  .input-group { margin-bottom: 15px; }
-  label { display: block; font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }
+  .input-group { margin-bottom: 16px; }
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;}
   
   input, select {
-    width: 100%; padding: 12px; background: var(--bg);
-    border: 1px solid var(--border); border-radius: 8px;
-    color: #fff; font-size: 14px; outline: none;
-    transition: border-color 0.2s;
+    width: 100%; padding: 14px 16px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 12px;
+    color: #fff; font-size: 16px; 
+    outline: none; font-family: var(--font); appearance: none; -webkit-appearance: none;
   }
-
-  /* Melhoria Mobile para Selects */
-  select {
-    -webkit-appearance: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234ade80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 16px;
-    padding-right: 40px;
-    cursor: pointer;
-  }
-
   input:focus, select:focus { border-color: var(--accent); }
   
-  .btn-submit {
-    width: 100%; padding: 16px; background: var(--accent);
-    color: #000; border: none; border-radius: 8px;
-    font-weight: 700; cursor: pointer; font-size: 14px; margin-top: 10px; transition: 0.2s;
+  .select-wrapper { position: relative; }
+  .select-wrapper::after {
+    content: "▼"; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 12px; pointer-events: none;
   }
-  .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
-  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Botão Eliminar Modelo no Formulário */
-  .delete-model-btn {
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--danger); padding: 0 16px; border-radius: 8px;
-    cursor: pointer; transition: 0.2s; font-size: 16px;
-    display: flex; align-items: center; justify-content: center;
+  .btn-primary {
+    width: 100%; padding: 16px; background: var(--accent); color: #000;
+    border: none; border-radius: 12px; font-weight: 600; font-size: 16px;
+    margin-top: 10px; cursor: pointer; transition: 0.2s;
   }
-  .delete-model-btn:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); }
+  .btn-primary:active { opacity: 0.7; transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* --- SECÇÃO DE FILTROS --- */
-  .filter-section { margin-bottom: 24px; }
-  .category-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 8px; }
-  
-  .category-btn {
-    background: var(--surface); border: 1px solid var(--border);
-    color: var(--muted); padding: 8px 16px; border-radius: 20px;
-    font-size: 12px; white-space: nowrap; cursor: pointer; transition: 0.2s; font-weight: 500; outline: none;
+  .btn-secondary {
+    width: 100%; padding: 12px; background: transparent; color: var(--accent);
+    border: 1px dashed var(--accent); border-radius: 12px; font-weight: 500; font-size: 14px;
+    margin-top: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .category-btn.active { background: #1a3d27; color: var(--accent); border-color: var(--accent); }
 
-  .search-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 600px) { .search-row { grid-template-columns: 1fr; } }
+  .new-model-box { background: rgba(48, 209, 88, 0.05); border: 1px solid rgba(48, 209, 88, 0.3); padding: 16px; border-radius: 12px; margin-top: 12px; }
+  .specs-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 
-  /* --- GRELHA DE ATIVOS --- */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+  .filter-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 12px; scrollbar-width: none; }
+  .filter-scroll::-webkit-scrollbar { display: none; }
+  .chip {
+    background: var(--surface2); color: var(--text); padding: 8px 16px; border-radius: 20px;
+    font-size: 13px; font-weight: 500; white-space: nowrap; border: 1px solid var(--border); cursor: pointer;
+  }
+  .chip.active { background: rgba(48, 209, 88, 0.15); color: var(--accent); border-color: var(--accent); }
+
   .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 16px; position: relative;
-    animation: fadeIn 0.3s ease-out;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 16px; margin-bottom: 16px; position: relative;
   }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
   .card-img {
-    width: 100%; height: 140px; background: #222; border-radius: 8px; margin-bottom: 12px;
-    display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border);
+    width: 100%; height: 120px; background: var(--surface2); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
   }
-  .card-img img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
-  .card-img span { font-size: 54px; }
+  .card-img span { font-size: 48px; }
 
-  .card-title { font-weight: 600; font-size: 15px; margin-bottom: 4px; padding-right: 30px; }
-  .card-sub { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-bottom: 10px; }
+  .card-title { font-weight: 600; font-size: 16px; margin-bottom: 4px; padding-right: 40px; }
+  .card-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; background: var(--surface2); color: var(--text); font-size: 11px; font-weight: 600; }
   
-  .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; background: #1a3d27; color: var(--accent); font-size: 11px; font-weight: 600; }
-  .data-row { display: flex; justify-content: space-between; font-size: 12px; font-family: var(--mono); margin-top: 8px; }
-  .label-key { color: var(--muted); }
+  .spec-row { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .spec-badge { background: #000; color: #ccc; font-size: 10px; padding: 4px 8px; border-radius: 6px; font-family: var(--mono); border: 1px solid var(--border); }
 
-  .specs-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-  .spec-badge { display: inline-flex; align-items: center; justify-content: center; background: #222; border: 1px solid var(--border); color: #ccc; font-size: 10px; padding: 4px 8px; border-radius: 4px; margin-right: 4px; margin-bottom: 4px; font-family: var(--mono); }
+  .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--mono); font-size: 12px; background: #000; padding: 10px; border-radius: 8px; }
+  .data-col { display: flex; flex-direction: column; }
+  .data-lbl { color: var(--muted); font-size: 10px; }
+  .data-val { color: var(--accent); }
 
-  /* BOTÃO ELIMINAR */
   .delete-btn {
     position: absolute; top: 16px; right: 16px;
-    background: none; border: none; color: var(--muted);
-    cursor: pointer; transition: 0.2s; font-size: 18px;
-    display: flex; align-items: center; justify-content: center;
-    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255, 69, 58, 0.1); color: var(--danger); border: none;
+    width: 36px; height: 36px; border-radius: 50%; font-size: 16px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
   }
-  .delete-btn:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
 
-  /* MODAL DE CONFIRMAÇÃO */
-  .confirm-overlay {
+  .overlay {
     position: fixed; top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.85); z-index: 1000;
-    display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+    background: rgba(0,0,0,0.8); z-index: 200; display: none;
+    align-items: center; justify-content: center; backdrop-filter: blur(5px);
   }
-  .confirm-modal {
-    background: var(--surface); border: 1px solid var(--border);
-    padding: 24px; border-radius: 16px; max-width: 350px; width: 90%; text-align: center;
+  .overlay.active { display: flex; }
+  .modal {
+    background: var(--surface); width: 90%; max-width: 350px;
+    border-radius: 20px; padding: 24px; text-align: center; border: 1px solid var(--border);
   }
-  .confirm-btns { display: flex; gap: 12px; margin-top: 24px; }
-  .confirm-btns button { flex: 1; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s;}
-  .btn-no { background: var(--surface2); color: var(--text); }
-  .btn-no:hover { background: var(--border); }
-  .btn-yes { background: var(--danger); color: #fff; }
-  .btn-yes:hover { opacity: 0.9; }
+  .modal h3 { margin-bottom: 8px; font-size: 18px; }
+  .modal p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .modal-btns { display: flex; gap: 12px; }
+  .modal-btn { flex: 1; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 15px; border: none; cursor: pointer;}
+  .btn-cancel { background: var(--surface2); color: var(--text); }
+  .btn-confirm { background: var(--danger); color: #fff; }
 
-  .loader { text-align: center; color: var(--muted); padding: 40px; }
+  .loader { text-align: center; color: var(--muted); padding: 40px; font-size: 14px; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">// INVENTÁRIO <span>TI GLÓRIA 122</span></div>
-  <button id="btn-sync" title="Sincronizar" style="background:none; border:none; color:var(--muted); cursor:pointer; font-size: 18px; transition: 0.2s; outline:none;">↻</button>
+  <button type="button" class="btn-sync" id="btn-sync" title="Sincronizar" onclick="loadData()">↻</button>
 </header>
 
-<nav>
-  <button class="nav-btn active" id="btn-scan">Novo Registo</button>
-  <button class="nav-btn" id="btn-view">Inventário</button>
-</nav>
-
 <main>
-  <!-- ABA DE REGISTRO MANUAL -->
-  <div id="tab-scan" class="form-container">
-    <div class="input-group">
-      <label>Património / Número de Série</label>
-      <input type="text" id="f-serial" placeholder="Digite o número de série...">
-    </div>
-
-    <div class="input-group">
-      <label>Modelo do Equipamento</label>
-      <div style="display: flex; gap: 8px;">
-        <select id="f-modelo" style="flex: 1;">
-          <option value="">Selecione o modelo...</option>
-          <option value="NEW">+ Adicionar Novo Modelo</option>
-        </select>
-        <button id="btn-delete-model" class="delete-model-btn hidden" title="Eliminar Modelo">🗑️</button>
+  <div id="view-scan" class="view-section active">
+    
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 16px;">
+      <div>
+        <label>Património / Série</label>
+        <input type="text" id="f-serial" placeholder="Série/Património">
+      </div>
+      <div>
+        <label>Qtd. Itens</label>
+        <input type="number" id="f-qtd" value="1" min="1" style="text-align: center;">
       </div>
     </div>
 
-    <!-- CAMPOS PARA NOVO MODELO -->
-    <div id="new-model-fields" class="hidden" style="background: var(--surface2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed var(--accent);">
+    <div class="input-group" id="block-select-model">
+      <label>Equipamento (Modelo)</label>
+      <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <div class="select-wrapper" style="flex: 1;">
+          <select id="f-modelo" onchange="checkTrashButton(); updateAssetFieldsVisibility();">
+            <option value="">A carregar modelos...</option>
+          </select>
+        </div>
+        <button type="button" id="btn-delete-model" class="delete-model-btn" style="display:none;" onclick="promptDeleteModel()">🗑️</button>
+      </div>
+      <button type="button" id="btn-toggle-new" class="btn-secondary" onclick="toggleNewModel(true)">
+        + Adicionar Novo Modelo
+      </button>
+    </div>
+
+    <div id="block-new-model" class="new-model-box" style="display:none;">
+      <h4 style="margin-bottom: 12px; color: var(--accent); font-size: 14px;">Criar Novo Modelo</h4>
+      
       <div class="input-group">
         <label>Nome do Modelo</label>
-        <input type="text" id="f-new-name" placeholder="Ex: Dell Optiplex 3070">
+        <input type="text" id="f-new-name" placeholder="Ex: HP LaserJet M15w" oninput="suggestId(this.value)">
       </div>
       
       <div class="input-group">
-        <label>Categoria (Tipo)</label>
-        <select id="f-new-type-select">
-          <option value="">Selecione uma categoria...</option>
-          <option value="Computador">Computador</option>
-          <option value="Notebook">Notebook / Portátil</option>
-          <option value="Monitor">Monitor</option>
-          <option value="Impressora">Impressora</option>
-          <option value="Amplificador">Amplificador</option>
-          <option value="UPS">UPS / Nobreak</option>
-          <option value="Servidor">Servidor</option>
-          <option value="OUTRO">Outro (Digitar manualmente)</option>
-        </select>
-      </div>
-      
-      <div class="input-group hidden" id="custom-type-group">
-        <label>Qual a categoria?</label>
-        <input type="text" id="f-new-type-custom" placeholder="Ex: Projetor, Switch...">
-      </div>
-      
-      <!-- ESPECIFICAÇÕES -->
-      <div id="specs-fields" class="hidden">
-        <label>Especificações Técnicas</label>
-        <div class="specs-grid">
-          <input type="text" id="f-new-cpu" placeholder="Proc. (ex: i5)">
-          <input type="text" id="f-new-ram" placeholder="RAM (ex: 8GB)">
-          <input type="text" id="f-new-storage" placeholder="Disco (ex: 256GB)">
-        </div>
-      </div>
-
-      <div class="input-group">
-        <label>Emoji / Ícone</label>
-        <input type="text" id="f-new-icon" value="📦">
-      </div>
-      <div class="input-group" style="margin-bottom:0">
-        <label>ID Único (Gerado Automaticamente)</label>
-        <input type="text" id="f-new-id" readonly style="background: #111; color: var(--muted);">
-      </div>
-    </div>
-
-    <div class="input-group">
-      <label>Nome do Host (Hostname)</label>
-      <input type="text" id="f-hostname" placeholder="Ex: PC-COORD-01">
-    </div>
-
-    <div class="input-group">
-      <label>Setor / Sala</label>
-      <input type="text" id="f-setor" placeholder="Ex: Receção, Sala 202...">
-    </div>
-
-    <button class="btn-submit" id="btn-save">GUARDAR EQUIPAMENTO</button>
-  </div>
-
-  <!-- ABA DE VISUALIZAÇÃO (INVENTÁRIO) -->
-  <div id="tab-view" class="hidden">
-    <div class="filter-section">
-      <div class="category-tabs" id="category-chips">
-        <button class="category-btn active" onclick="filterByCategory('TODOS')">Todos</button>
-      </div>
-      
-      <div class="search-row">
-        <div class="input-group" style="margin-bottom:0">
-          <label>Pesquisa de Texto</label>
-          <input type="text" id="search-input" placeholder="Filtrar por nome ou série...">
-        </div>
-        <div class="input-group" style="margin-bottom:0">
-          <label>Filtrar por Sala</label>
-          <select id="filter-room">
-            <option value="ALL">Todas as Salas</option>
+        <label>Categoria</label>
+        <div class="select-wrapper">
+          <select id="f-new-type-select" onchange="handleCategoryChange(); updateAssetFieldsVisibility();">
+            <option value="">Selecione...</option>
+            <option value="Computador">Computador</option>
+            <option value="Notebook">Portátil / Notebook</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Access Point">Access Point</option>
+            <option value="Receptor de Microfone">Receptor de Microfone</option>
+            <option value="Microfone com fio">Microfone com fio</option>
+            <option value="Impressora">Impressora</option>
+            <option value="Amplificador">Amplificador</option>
+            <option value="UPS">UPS / Nobreak</option>
+            <option value="Servidor">Servidor</option>
+            <option value="Toner">Toner</option>
+            <option value="Outro">Outro...</option>
           </select>
         </div>
       </div>
+      
+      <div class="input-group" id="group-custom-type" style="display:none;">
+        <label>Qual categoria?</label>
+        <input type="text" id="f-new-type-custom" placeholder="Ex: Projetor" oninput="handleCategoryChange(); updateAssetFieldsVisibility();">
+      </div>
+      
+      <div id="group-specs" style="display:none;">
+        <label>Especificações Técnicas</label>
+        <div class="specs-grid">
+          <input type="text" id="f-new-cpu" placeholder="CPU">
+          <input type="text" id="f-new-ram" placeholder="RAM">
+          <input type="text" id="f-new-storage" placeholder="Disco">
+        </div>
+        <br>
+      </div>
+
+      <div id="group-mic" style="display:none;">
+        <label>Microfones Sem Fio Incluídos</label>
+        <div class="specs-grid" style="grid-template-columns: 1fr;">
+          <input type="number" id="f-new-mic-count" placeholder="Qtd. de Microfones" min="1">
+        </div>
+        <br>
+      </div>
+
+      <div id="group-toner" style="display:none;">
+        <label>Detalhes do Toner</label>
+        <div class="specs-grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="select-wrapper">
+            <select id="f-new-toner-color">
+              <option value="">Cor...</option>
+              <option value="Preto">Preto</option>
+              <option value="Ciano">Ciano</option>
+              <option value="Magenta">Magenta</option>
+              <option value="Amarelo">Amarelo</option>
+            </select>
+          </div>
+          <input type="text" id="f-new-toner-printer" placeholder="Para qual impressora?">
+        </div>
+        <br>
+      </div>
+
+      <div class="input-group" style="margin-bottom: 0;">
+        <label>Ícone/Emoji</label>
+        <input type="text" id="f-new-icon" value="📦">
+      </div>
+      <input type="hidden" id="f-new-id">
+
+      <button type="button" id="btn-cancel-new" class="btn-secondary" style="margin-top: 16px; border-color: var(--muted); color: var(--muted);" onclick="toggleNewModel(false)">
+        Cancelar Criação
+      </button>
     </div>
-    
-    <div id="asset-grid" class="grid">
-      <div class="loader">A carregar inventário...</div>
+
+    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+      <div class="input-group" id="group-ip" style="display:none;">
+        <label style="color: var(--accent);">Endereço IP (Rede)</label>
+        <input type="text" id="f-ip" placeholder="Ex: 10.0.0.50">
+      </div>
+
+      <div class="input-group">
+        <label>Hostname / Nome da Rede</label>
+        <input type="text" id="f-hostname" placeholder="Ex: PC-SALA-01">
+      </div>
+
+      <div class="input-group">
+        <label>Sala / Setor</label>
+        <input type="text" id="f-setor" placeholder="Ex: Recepção">
+      </div>
+    </div>
+
+    <button type="button" class="btn-primary" id="btn-save" onclick="saveEquipment()">GUARDAR EQUIPAMENTO</button>
+  </div>
+
+  <div id="view-inventory" class="view-section">
+    <div class="filter-scroll" id="category-chips"></div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+      <input type="text" id="search-input" placeholder="Pesquisar..." oninput="renderList()">
+      <div class="select-wrapper">
+        <select id="filter-room" onchange="renderList()">
+          <option value="ALL">Todas as Salas</option>
+        </select>
+      </div>
+    </div>
+    <div id="asset-grid">
+      <div class="loader">A sincronizar dados...</div>
     </div>
   </div>
 </main>
 
-<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
-<div id="confirm-box" class="confirm-overlay hidden">
-  <div class="confirm-modal">
-    <h3 id="confirm-title">Eliminar Equipamento?</h3>
-    <p id="confirm-text">Tens a certeza de que desejas remover este equipamento? Esta ação não pode ser desfeita na folha de cálculo.</p>
-    <div class="confirm-btns">
-      <button class="btn-no" id="btn-cancel-delete">Cancelar</button>
-      <button class="btn-yes" id="confirm-delete-btn">Eliminar</button>
+<nav>
+  <button type="button" class="nav-btn active" id="nav-scan" onclick="switchView('scan')">
+    <span class="nav-icon">📷</span>
+    <span>Registar</span>
+  </button>
+  <button type="button" class="nav-btn" id="nav-inventory" onclick="switchView('inventory')">
+    <span class="nav-icon">📋</span>
+    <span>Inventário</span>
+  </button>
+</nav>
+
+<div class="overlay" id="modal-overlay">
+  <div class="modal">
+    <h3 id="modal-title">Confirmar</h3>
+    <p id="modal-desc">Tem a certeza?</p>
+    <div class="modal-btns">
+      <button type="button" class="modal-btn btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button type="button" class="modal-btn btn-confirm" id="btn-modal-confirm" onclick="executeDelete()">Eliminar</button>
     </div>
   </div>
 </div>
 
 <script>
-// ==========================================
-// LÓGICA DE PROGRAMAÇÃO EM JAVASCRIPT
-// ==========================================
+// ==================================================
+// LÓGICA DE PROGRAMAÇÃO JAVASCRIPT (MOBILE-FIRST)
+// ==================================================
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwcxhSyEvWsnS9NegVbXxBXsAyPBn8drF3alTsdHnq2mmATFWLWFBrdANc7gxGGoDV/exec"; 
+// LINK ATUALIZADO
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWtBTOBSmEmQsCbZHltImkpJ4fLBT1YOaY0eH8L36Ye_wOxGBLNW1-QBD5rdonNOwY/exec";
 
-let modelos = [];
-let ativos = [];
-let currentCategory = 'TODOS';
-let itemToDelete = null;
-let deleteType = 'asset'; 
-
-// Arranque Seguro: Só executa quando a página e o telemóvel estiverem 100% carregados
-document.addEventListener('DOMContentLoaded', () => {
-  
-  // Conectar Botões de Navegação (Abas)
-  document.getElementById('btn-scan').addEventListener('click', () => showTab('scan'));
-  document.getElementById('btn-view').addEventListener('click', () => showTab('view'));
-  document.getElementById('btn-sync').addEventListener('click', fetchData);
-  
-  // Conectar Formulário
-  document.getElementById('f-modelo').addEventListener('change', checkNewModel);
-  document.getElementById('f-new-type-select').addEventListener('change', checkModelType);
-  document.getElementById('f-new-type-custom').addEventListener('input', checkModelType);
-  document.getElementById('f-new-name').addEventListener('input', (e) => suggestId(e.target.value));
-  document.getElementById('btn-save').addEventListener('click', saveData);
-  document.getElementById('btn-delete-model').addEventListener('click', askDeleteModel);
-  
-  // Conectar Filtros e Modal
-  document.getElementById('search-input').addEventListener('input', renderDashboard);
-  document.getElementById('filter-room').addEventListener('change', renderDashboard);
-  document.getElementById('btn-cancel-delete').addEventListener('click', closeConfirm);
-  document.getElementById('confirm-delete-btn').addEventListener('click', executeDelete);
-
-  // Iniciar Busca de Dados
-  fetchData();
-});
-
-async function fetchData() {
-  const grid = document.getElementById('asset-grid');
-  try {
-    const response = await fetch(SCRIPT_URL + "?action=getAll");
-    const data = await response.json();
-    modelos = data.modelos || [];
-    ativos = data.ativos || [];
-    
-    updateUIComponents();
-    renderDashboard();
-  } catch (e) { 
-    grid.innerHTML = "<div class='loader'>⚠️ Erro ao conectar com o Google Sheets. Verifica a tua ligação à internet.</div>";
-  }
-}
-
-// Atualização Segura para Mobile (usando new Option em vez de innerHTML nos selects)
-function updateUIComponents() {
-  // Select de Modelos
-  const selectModelo = document.getElementById('f-modelo');
-  const currentVal = selectModelo.value;
-  selectModelo.options.length = 0; // Limpa as opções de forma segura
-  selectModelo.add(new Option("Selecione o modelo...", ""));
-  selectModelo.add(new Option("+ Adicionar Novo Modelo", "NEW"));
-  modelos.forEach(m => selectModelo.add(new Option(m.nome, m.id)));
-  selectModelo.value = currentVal || "";
-  checkNewModel(); 
-
-  // Chips de Categoria
-  const container = document.getElementById('category-chips');
-  const tipos = [...new Set(modelos.map(m => m.tipo).filter(t => t))].sort();
-  container.innerHTML = `<button class="category-btn ${currentCategory === 'TODOS' ? 'active' : ''}" onclick="filterByCategory('TODOS')">Todos</button>`;
-  tipos.forEach(tipo => {
-    container.innerHTML += `<button class="category-btn ${currentCategory === tipo ? 'active' : ''}" onclick="filterByCategory('${tipo}')">${tipo}</button>`;
-  });
-
-  // Select de Salas
-  const roomSelect = document.getElementById('filter-room');
-  const currentRoom = roomSelect.value;
-  const salas = [...new Set(ativos.map(a => a.setor).filter(s => s))].sort();
-  roomSelect.options.length = 0;
-  roomSelect.add(new Option("Todas as Salas", "ALL"));
-  salas.forEach(sala => roomSelect.add(new Option(sala, sala)));
-  roomSelect.value = currentRoom || "ALL";
-}
-
-// A função filterByCategory é chamada pelos botões gerados dinamicamente
-window.filterByCategory = function(tipo) {
-  currentCategory = tipo;
-  updateUIComponents(); 
-  renderDashboard();
+let STATE = {
+  modelos: [], ativos: [],
+  categoriaAtual: 'TODOS',
+  modoNovoModelo: false,
+  itemParaApagar: null,
+  tipoApagar: 'asset' 
 };
+
+function initApp() {
+  loadData();
+}
+
+function switchView(view) {
+  document.getElementById('view-scan').classList.toggle('active', view === 'scan');
+  document.getElementById('view-inventory').classList.toggle('active', view === 'inventory');
+  document.getElementById('nav-scan').classList.toggle('active', view === 'scan');
+  document.getElementById('nav-inventory').classList.toggle('active', view === 'inventory');
+  if (view === 'inventory') renderList();
+}
+
+function toggleNewModel(forceOpen) {
+  STATE.modoNovoModelo = forceOpen;
+  document.getElementById('block-select-model').style.display = forceOpen ? 'none' : 'block';
+  document.getElementById('block-new-model').style.display = forceOpen ? 'block' : 'none';
+  if (!forceOpen) {
+    document.getElementById('f-new-name').value = '';
+    document.getElementById('f-new-type-select').value = '';
+    handleCategoryChange(); 
+  }
+  updateAssetFieldsVisibility();
+}
+
+function checkTrashButton() {
+  const modelId = document.getElementById('f-modelo').value;
+  document.getElementById('btn-delete-model').style.display = (modelId && modelId !== "") ? 'flex' : 'none';
+}
+
+function handleCategoryChange() {
+  const select = document.getElementById('f-new-type-select').value;
+  const isCustom = select === 'Outro';
+  document.getElementById('group-custom-type').style.display = isCustom ? 'block' : 'none';
+  
+  const finalCat = isCustom ? document.getElementById('f-new-type-custom').value.toLowerCase() : select.toLowerCase();
+  
+  const showSpecs = finalCat.includes('computador') || finalCat.includes('portátil') || finalCat.includes('notebook') || finalCat.includes('pc') || finalCat.includes('servidor');
+  document.getElementById('group-specs').style.display = showSpecs ? 'block' : 'none';
+
+  const isReceptor = finalCat.includes('receptor de microfone');
+  document.getElementById('group-mic').style.display = isReceptor ? 'block' : 'none';
+
+  const isToner = finalCat === 'toner';
+  document.getElementById('group-toner').style.display = isToner ? 'block' : 'none';
+}
+
+function updateAssetFieldsVisibility() {
+  let cat = "";
+  if (STATE.modoNovoModelo) {
+    cat = getFinalCategory().toLowerCase();
+  } else {
+    const selMod = document.getElementById('f-modelo').value;
+    const model = STATE.modelos.find(m => m.id == selMod);
+    if (model) cat = (model.tipo || "").toLowerCase();
+  }
+
+  const showIP = cat.includes('access point') || cat.includes('servidor') || cat.includes('computador') || cat.includes('router') || cat.includes('switch') || cat.includes('impressora');
+  document.getElementById('group-ip').style.display = showIP ? 'block' : 'none';
+}
+
+function getFinalCategory() {
+  const select = document.getElementById('f-new-type-select').value;
+  if (select === 'Outro') return document.getElementById('f-new-type-custom').value.trim();
+  return select;
+}
 
 function suggestId(name) {
   const idField = document.getElementById('f-new-id');
   idField.value = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, ''); 
 }
 
-function checkNewModel() {
-  const selectVal = document.getElementById('f-modelo').value;
-  const isNew = selectVal === "NEW";
+async function loadData() {
+  const grid = document.getElementById('asset-grid');
+  grid.innerHTML = '<div class="loader">A sincronizar com a base de dados...</div>';
   
-  document.getElementById('new-model-fields').classList.toggle('hidden', !isNew);
-  
-  const showTrash = selectVal !== "" && selectVal !== "NEW";
-  document.getElementById('btn-delete-model').classList.toggle('hidden', !showTrash);
-
-  if (isNew) checkModelType();
+  try {
+    const res = await fetch(SCRIPT_URL + "?action=getAll");
+    const data = await res.json();
+    STATE.modelos = data.modelos || [];
+    STATE.ativos = data.ativos || [];
+    
+    updateSelectors();
+    renderList();
+  } catch (err) {
+    grid.innerHTML = `<div class="loader" style="color:var(--danger)"><b>⚠️ Erro de Ligação</b></div>`;
+  }
 }
 
-function checkModelType() {
-  const selectVal = document.getElementById('f-new-type-select').value;
-  const isCustom = selectVal === 'OUTRO';
-  
-  document.getElementById('custom-type-group').classList.toggle('hidden', !isCustom);
-  
-  const finalType = isCustom ? document.getElementById('f-new-type-custom').value.toLowerCase() : selectVal.toLowerCase();
-  const needsSpecs = finalType.includes('computador') || finalType.includes('portátil') || finalType.includes('notebook') || finalType.includes('pc') || finalType.includes('servidor');
-  
-  const specsDiv = document.getElementById('specs-fields');
-  if(specsDiv) specsDiv.classList.toggle('hidden', !needsSpecs);
+function updateSelectors() {
+  const selMod = document.getElementById('f-modelo');
+  const currentMod = selMod.value;
+  selMod.options.length = 0;
+  selMod.add(new Option("Selecione o modelo...", ""));
+  STATE.modelos.forEach(m => selMod.add(new Option(m.nome, m.id)));
+  selMod.value = currentMod;
+  checkTrashButton();
+  updateAssetFieldsVisibility();
+
+  const selRoom = document.getElementById('filter-room');
+  const currentRoom = selRoom.value;
+  selRoom.options.length = 0;
+  selRoom.add(new Option("Todas as Salas", "ALL"));
+  const rooms = [...new Set(STATE.ativos.map(a => a.setor).filter(Boolean))].sort();
+  rooms.forEach(r => selRoom.add(new Option(r, r)));
+  selRoom.value = currentRoom || "ALL";
+
+  const chipsDiv = document.getElementById('category-chips');
+  chipsDiv.innerHTML = `<button type="button" class="chip ${STATE.categoriaAtual === 'TODOS' ? 'active' : ''}" onclick="setCategory('TODOS')">Todos</button>`;
+  const cats = [...new Set(STATE.modelos.map(m => m.tipo).filter(Boolean))].sort();
+  cats.forEach(c => {
+    chipsDiv.innerHTML += `<button type="button" class="chip ${STATE.categoriaAtual === c ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`;
+  });
 }
 
-function getFinalCategoryValue() {
-  const selectVal = document.getElementById('f-new-type-select').value;
-  if (selectVal === 'OUTRO') return document.getElementById('f-new-type-custom').value.trim();
-  return selectVal;
-}
+window.setCategory = function(cat) {
+  STATE.categoriaAtual = cat;
+  updateSelectors(); 
+  renderList();
+};
 
-async function saveData() {
-  const btn = document.getElementById('btn-save');
+async function saveEquipment() {
   const payload = {
     serial: document.getElementById('f-serial').value.trim(),
     hostname: document.getElementById('f-hostname').value.trim(),
     setor: document.getElementById('f-setor').value.trim(),
-    modeloid: document.getElementById('f-modelo').value,
-    isNovoModelo: document.getElementById('f-modelo').value === "NEW",
+    ip: document.getElementById('f-ip').value.trim(), 
+    isNovoModelo: STATE.modoNovoModelo,
+    modeloid: STATE.modoNovoModelo ? document.getElementById('f-new-id').value : document.getElementById('f-modelo').value,
     nomeModelo: document.getElementById('f-new-name').value.trim(),
-    tipo: getFinalCategoryValue() || "Equipamento",
+    tipo: getFinalCategory() || "Equipamento",
     icon: document.getElementById('f-new-icon').value.trim() || "📦",
-    cpu: document.getElementById('f-new-cpu') ? document.getElementById('f-new-cpu').value.trim() : "",
-    ram: document.getElementById('f-new-ram') ? document.getElementById('f-new-ram').value.trim() : "",
-    storage: document.getElementById('f-new-storage') ? document.getElementById('f-new-storage').value.trim() : ""
+    cpu: document.getElementById('f-new-cpu').value.trim(),
+    ram: document.getElementById('f-new-ram').value.trim(),
+    storage: document.getElementById('f-new-storage').value.trim(),
+    miccount: document.getElementById('f-new-mic-count').value.trim(),
+    tonercolor: document.getElementById('f-new-toner-color') ? document.getElementById('f-new-toner-color').value.trim() : "",
+    tonerprinter: document.getElementById('f-new-toner-printer') ? document.getElementById('f-new-toner-printer').value.trim() : ""
   };
 
-  if (payload.isNovoModelo) payload.modeloid = document.getElementById('f-new-id').value;
-  
-  if (!payload.serial || !payload.modeloid) {
-    return alert("Preenche pelo menos o Património/Série e o Modelo!");
-  }
+  const qtd = parseInt(document.getElementById('f-qtd').value) || 1;
 
-  btn.innerText = "A GUARDAR..."; 
-  btn.disabled = true;
+  if (!payload.serial && qtd === 1) return alert("O Património é obrigatório!");
+  if (!payload.modeloid || (payload.isNovoModelo && !payload.nomeModelo)) return alert("Selecione um modelo!");
+
+  const btn = document.getElementById('btn-save');
+  btn.innerText = "A GUARDAR..."; btn.disabled = true;
 
   try {
-    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-    alert("Equipamento registado com sucesso!");
+    for (let i = 0; i < qtd; i++) {
+      let currentPayload = { ...payload };
+      if (qtd > 1 && currentPayload.serial) {
+        currentPayload.serial = `${currentPayload.serial} - (${i + 1}/${qtd})`;
+      }
+      if (i > 0) currentPayload.isNovoModelo = false;
+      await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(currentPayload) });
+    }
+    alert("Registado com sucesso!");
     resetForm();
-    await fetchData(); 
-    showTab('view');   
+    await loadData();
+    switchView('inventory');
   } catch (e) {
-    alert("Erro ao guardar o equipamento. Verifica a tua ligação.");
+    alert("Erro de rede.");
   } finally {
-    btn.innerText = "GUARDAR EQUIPAMENTO"; 
-    btn.disabled = false;
+    btn.innerText = "GUARDAR EQUIPAMENTO"; btn.disabled = false;
   }
 }
 
 function resetForm() {
-  ['f-serial', 'f-hostname', 'f-setor', 'f-modelo', 'f-new-name', 'f-new-id', 'f-new-type-select', 'f-new-type-custom', 'f-new-cpu', 'f-new-ram', 'f-new-storage'].forEach(id => {
-    if(document.getElementById(id)) document.getElementById(id).value = "";
+  ['f-serial', 'f-hostname', 'f-setor', 'f-ip', 'f-modelo', 'f-new-name', 'f-new-id', 'f-new-type-select', 'f-new-type-custom', 'f-new-cpu', 'f-new-ram', 'f-new-storage', 'f-new-mic-count', 'f-new-toner-color', 'f-new-toner-printer'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = "";
   });
   document.getElementById('f-new-icon').value = "📦";
-  checkNewModel();
+  document.getElementById('f-qtd').value = "1";
+  toggleNewModel(false);
 }
 
-function renderDashboard() {
+function renderList() {
   const grid = document.getElementById('asset-grid');
-  const query = document.getElementById('search-input').value.toLowerCase();
+  const q = document.getElementById('search-input').value.toLowerCase();
   const room = document.getElementById('filter-room').value;
 
-  let filtered = [...ativos].reverse().filter(a => {
-    const m = modelos.find(mod => String(mod.id) === String(a.modeloid)) || {};
-    const matchCategory = currentCategory === 'TODOS' || m.tipo === currentCategory;
-    const matchRoom = room === 'ALL' || a.setor === room;
-    const matchSearch = a.serial.toLowerCase().includes(query) || a.hostname.toLowerCase().includes(query) || (m.nome && m.nome.toLowerCase().includes(query));
-    return matchCategory && matchRoom && matchSearch;
+  let filtered = STATE.ativos.filter(a => {
+    const m = STATE.modelos.find(mod => String(mod.id) === String(a.modeloid)) || {};
+    const catMatch = STATE.categoriaAtual === 'TODOS' || m.tipo === STATE.categoriaAtual;
+    const roomMatch = room === 'ALL' || a.setor === room;
+    const textMatch = (a.serial||"").toLowerCase().includes(q) || (a.hostname||"").toLowerCase().includes(q) || (m.nome||"").toLowerCase().includes(q) || (a.ip||"").toLowerCase().includes(q);
+    return catMatch && roomMatch && textMatch;
   });
 
   if (filtered.length === 0) {
-    grid.innerHTML = "<div class='loader'>Nenhum equipamento encontrado com estes filtros.</div>";
+    grid.innerHTML = '<div class="loader">Nenhum equipamento encontrado.</div>';
     return;
   }
 
-  grid.innerHTML = filtered.map(a => {
-    const m = modelos.find(mod => String(mod.id) === String(a.modeloid)) || {};
-    const visual = m.foto ? `<img src="${m.foto}" alt="${m.nome}">` : `<span>${m.icon || '📦'}</span>`;
-
-    let specsHtml = "";
-    if (m.cpu || m.ram || m.storage) {
-      specsHtml = `<div style="margin-top: 8px;">
-        ${m.cpu ? `<span class="spec-badge">⚙️ ${m.cpu}</span>` : ''}
-        ${m.ram ? `<span class="spec-badge">🧠 ${m.ram}</span>` : ''}
-        ${m.storage ? `<span class="spec-badge">💾 ${m.storage}</span>` : ''}
-      </div>`;
-    }
+  grid.innerHTML = filtered.reverse().map(a => {
+    const m = STATE.modelos.find(mod => String(mod.id) === String(a.modeloid)) || {};
+    let specs = `<div class="spec-row">
+      ${m.cpu ? `<span class="spec-badge">⚙️ ${m.cpu}</span>` : ''}
+      ${m.ram ? `<span class="spec-badge">🧠 ${m.ram}</span>` : ''}
+      ${m.storage ? `<span class="spec-badge">💾 ${m.storage}</span>` : ''}
+      ${m.miccount ? `<span class="spec-badge">🎤 ${m.miccount} Mic(s)</span>` : ''}
+      ${m.tonercolor ? `<span class="spec-badge">💧 Cor: ${m.tonercolor}</span>` : ''}
+      ${m.tonerprinter ? `<span class="spec-badge">🖨️ Para: ${m.tonerprinter}</span>` : ''}
+      ${a.ip ? `<span class="spec-badge" style="background:#1a3d27; color:var(--accent);">🌐 ${a.ip}</span>` : ''}
+    </div>`;
 
     return `
       <div class="card">
-        <button class="delete-btn" onclick="askDelete('${a.id}')" title="Eliminar Equipamento">✕</button>
-        <div class="card-img">${visual}</div>
-        <div class="card-title">${m.nome || a.modeloid}</div>
-        <div class="card-sub">${m.tipo || 'ATIVO'}</div>
-        <div class="badge">${a.setor || 'Sem Sala'}</div>
-        ${specsHtml}
-        <div class="card-data">
-          <div class="data-row"><span class="label-key">hostname</span><span>${a.hostname || '—'}</span></div>
-          <div class="data-row"><span class="label-key">série</span><span>${a.serial}</span></div>
+        <button type="button" class="delete-btn" onclick="promptDeleteAsset('${a.id}')">✕</button>
+        <div class="card-title">${m.nome || 'Desconhecido'}</div>
+        <div class="card-sub">${m.tipo || 'Equipamento'}</div>
+        <div style="margin-bottom: 12px;"><span class="badge">${a.setor || 'Sem Sala'}</span></div>
+        ${specs}
+        <div class="data-grid">
+          <div class="data-col"><span class="data-lbl">SÉRIE/PAT.</span><span class="data-val">${a.serial}</span></div>
+          <div class="data-col"><span class="data-lbl">HOSTNAME</span><span class="data-val">${a.hostname || '--'}</span></div>
         </div>
       </div>
     `;
   }).join('');
 }
 
-// Precisa estar no window para os botões dinâmicos encontrarem a função
-window.askDelete = function(id) {
-  itemToDelete = id;
-  deleteType = 'asset';
-  document.getElementById('confirm-title').innerText = "Eliminar Equipamento?";
-  document.getElementById('confirm-text').innerText = "Tens a certeza de que desejas remover este equipamento? Esta ação não pode ser desfeita na folha de cálculo.";
-  document.getElementById('confirm-box').classList.remove('hidden');
+window.promptDeleteAsset = function(id) {
+  STATE.itemParaApagar = id;
+  STATE.tipoApagar = 'asset';
+  document.getElementById('modal-overlay').classList.add('active');
 };
 
-function askDeleteModel() {
-  const select = document.getElementById('f-modelo');
-  const modelId = select.value;
-  if(!modelId || modelId === "NEW") return;
-  const modelName = select.options[select.selectedIndex].text;
-  
-  itemToDelete = modelId;
-  deleteType = 'model';
-  document.getElementById('confirm-title').innerText = "Eliminar Modelo do Filtro?";
-  document.getElementById('confirm-text').innerText = `Desejas remover permanentemente o modelo "${modelName}" do sistema? Atenção: Todos os equipamentos vinculados a este modelo também serão eliminados!`;
-  document.getElementById('confirm-box').classList.remove('hidden');
+function promptDeleteModel() {
+  const sel = document.getElementById('f-modelo');
+  if(!sel.value) return;
+  STATE.itemParaApagar = sel.value;
+  STATE.tipoApagar = 'model';
+  document.getElementById('modal-overlay').classList.add('active');
 }
 
-function closeConfirm() {
-  document.getElementById('confirm-box').classList.add('hidden');
-  itemToDelete = null;
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  STATE.itemParaApagar = null;
 }
 
 async function executeDelete() {
-  if (!itemToDelete) return;
-  const btn = document.getElementById('confirm-delete-btn');
+  const btn = document.getElementById('btn-modal-confirm');
   btn.innerText = "A aguardar..."; btn.disabled = true;
-
   try {
-    const actionToSend = deleteType === 'model' ? 'delete_model' : 'delete';
-    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: actionToSend, id: itemToDelete }) });
-    
-    if(deleteType === 'model') {
-      modelos = modelos.filter(m => String(m.id) !== String(itemToDelete));
-      ativos = ativos.filter(a => String(a.modeloid) !== String(itemToDelete));
-      document.getElementById('f-modelo').value = "";
-      checkNewModel();
-    } else {
-      ativos = ativos.filter(a => String(a.id) !== String(itemToDelete));
-    }
-    
-    renderDashboard();
-    updateUIComponents(); 
-    closeConfirm();
+    const action = STATE.tipoApagar === 'model' ? 'delete_model' : 'delete';
+    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: action, id: STATE.itemParaApagar }) });
+    await loadData();
+    closeModal();
   } catch (e) {
-    alert("Houve um problema ao eliminar. Tenta novamente.");
+    alert("Erro.");
   } finally {
     btn.innerText = "Eliminar"; btn.disabled = false;
   }
 }
 
-function showTab(tab) {
-  document.getElementById('tab-scan').classList.toggle('hidden', tab !== 'scan');
-  document.getElementById('tab-view').classList.toggle('hidden', tab !== 'view');
-  document.getElementById('btn-scan').classList.toggle('active', tab === 'scan');
-  document.getElementById('btn-view').classList.toggle('active', tab === 'view');
-  if(tab === 'view') renderDashboard();
-}
+document.addEventListener('DOMContentLoaded', initApp);
 </script>
 </body>
 </html>
