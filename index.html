@@ -58,23 +58,23 @@
   .chip.active { background: rgba(48, 209, 88, 0.15); color: var(--accent); border-color: var(--accent); }
   
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 16px; overflow: hidden; position: relative;}
-  .card-img { width: 100%; height: 90px; background: #000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); font-size: 40px; }
+  .card-img { width: 100%; height: 100px; background: #000; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); font-size: 44px; }
   
   .card-content { padding: 16px; }
   .card-title { font-weight: 600; font-size: 17px; margin-bottom: 2px; color: #fff; }
-  .card-sub { font-size: 10px; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; font-family: var(--mono); }
-  .badge { background: var(--surface2); padding: 4px 10px; border-radius: 6px; font-size: 11px; color: var(--accent); border: 1px solid var(--border); display: inline-block; }
+  .card-sub { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; font-family: var(--mono); }
+  .badge { background: var(--surface2); padding: 4px 10px; border-radius: 6px; font-size: 12px; color: var(--accent); border: 1px solid var(--border); display: inline-block; }
   
-  .spec-badge { background: #1c1c1e; color: #8e8e93; font-size: 9px; padding: 3px 7px; border-radius: 5px; font-family: var(--mono); border: 1px solid var(--border); margin: 0 4px 4px 0; display: inline-block; }
+  .spec-badge { background: #1c1c1e; color: #8e8e93; font-size: 10px; padding: 4px 8px; border-radius: 6px; font-family: var(--mono); border: 1px solid var(--border); margin: 0 4px 4px 0; display: inline-block; }
   
-  .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--mono); font-size: 11px; background: #000; padding: 10px; border-radius: 8px; margin-top: 10px; }
-  .data-lbl { color: var(--muted); font-size: 8px; margin-bottom: 1px; text-transform: uppercase; }
+  .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--mono); font-size: 12px; background: #000; padding: 12px; border-radius: 8px; margin-top: 10px; }
+  .data-lbl { color: var(--muted); font-size: 9px; margin-bottom: 2px; text-transform: uppercase; }
   
-  .delete-btn { position: absolute; top: 12px; right: 12px; background: rgba(255,69,58,0.2); color: var(--danger); border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 5; font-size: 14px;}
+  .delete-btn { position: absolute; top: 12px; right: 12px; background: rgba(255,69,58,0.2); color: var(--danger); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; z-index: 5; font-size: 14px;}
   
   .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
   .overlay.active { display: flex; }
-  .modal { background: var(--surface); width: 90%; max-width: 320px; border-radius: 20px; padding: 20px; text-align: center; }
+  .modal { background: var(--surface); width: 90%; max-width: 350px; border-radius: 20px; padding: 24px; text-align: center; }
 </style>
 </head>
 <body>
@@ -95,7 +95,7 @@
     <div id="model-select-block">
       <label>Modelo do Equipamento</label>
       <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-        <select id="f-modelo" style="flex: 1;"><option value="">A carregar...</option></select>
+        <select id="f-modelo" style="flex: 1;"><option value="">A carregar modelos...</option></select>
         <button id="del-mod-btn" style="display:none; background:none; border:none; font-size:18px;">🗑️</button>
       </div>
       <button class="btn-secondary" id="show-new-mod-btn">+ Adicionar Novo Modelo</button>
@@ -119,9 +119,9 @@
         </select>
       </div>
 
-      <!-- Campo para Categoria Customizada (Outro) -->
+      <!-- Campo para Categoria Customizada (Aparece se for Outro) -->
       <div id="other-block" style="display:none;" class="input-group">
-        <label style="color: var(--accent);">Qual é o tipo?</label>
+        <label style="color: var(--accent);">Especifique o Tipo</label>
         <input type="text" id="f-other-type" placeholder="Ex: Switch, Mouse, Hub...">
       </div>
 
@@ -148,7 +148,7 @@
 
     <div style="margin-top:20px;">
       <div id="ip-block" style="display:none;" class="input-group">
-        <label style="color: var(--accent);">IP na Rede</label>
+        <label style="color: var(--accent);">Endereço IP</label>
         <input type="text" id="f-ip" placeholder="0.0.0.0">
       </div>
       <div class="input-group"><label>Hostname</label><input type="text" id="f-hostname" placeholder="Nome na rede"></div>
@@ -176,7 +176,7 @@
 
 <div class="overlay" id="overlay">
   <div class="modal">
-    <h3>Confirmar</h3><p style="margin:15px 0; color:var(--muted); font-size:13px;">Eliminar este registo?</p>
+    <h3>Confirmar</h3><p style="margin:15px 0; color:var(--muted); font-size:14px;">Eliminar este item do inventário?</p>
     <div style="display:flex; gap:10px;">
       <button class="btn-primary" style="background:var(--surface2); color:#fff;" id="m-cancel">Não</button>
       <button class="btn-primary" id="m-confirm" style="background:var(--danger);">Sim</button>
@@ -219,15 +219,14 @@
     updateUI();
   }
 
-  // Lógica de UI robusta
   function updateUI() {
     const isNew = document.getElementById('new-model-block').style.display === 'block';
     let cat = "";
     
     if(isNew) {
       cat = document.getElementById('f-new-type').value.toLowerCase();
-      // Mostrar campo customizado se for "Outro"
-      document.getElementById('other-block').style.display = cat === 'outro' ? 'block' : 'none';
+      // Mostrar campo "Outro" se necessário
+      document.getElementById('other-block').style.display = (cat === 'outro') ? 'block' : 'none';
     } else {
       const mid = document.getElementById('f-modelo').value;
       const m = findModel(mid);
@@ -239,12 +238,11 @@
     document.getElementById('specs-block').style.display = (cat.includes('computador') || cat.includes('notebook')) ? 'block' : 'none';
     document.getElementById('toner-block').style.display = cat.includes('toner') ? 'block' : 'none';
     
-    // IP visível para rede ou se o usuário escrever algo em "Outro"
     const isNet = cat === 'outro' || cat.includes('access') || cat.includes('impressora') || cat.includes('computador') || cat.includes('notebook') || cat.includes('switch') || cat.includes('router');
     document.getElementById('ip-block').style.display = isNet ? 'block' : 'none';
   }
 
-  // BUSCA DE MODELO SEM ERRO (Compara ID como String limpa)
+  // BUSCA DE MODELO ROBUSTA (Evita o "Modelo Desconhecido")
   function findModel(id) {
     if(!id) return null;
     const searchId = String(id).trim().toLowerCase();
@@ -262,7 +260,7 @@
       updateSelectors();
       render();
     } catch (e) {
-      list.innerHTML = '<div class="loader" style="color:var(--danger)">Erro de ligação.</div>';
+      list.innerHTML = '<div class="loader" style="color:var(--danger)">Erro ao conectar ao servidor.</div>';
     }
   }
 
@@ -280,7 +278,7 @@
     const chips = document.getElementById('cat-chips');
     chips.innerHTML = `<button class="chip ${DB.cat === 'TODOS' ? 'active' : ''}" onclick="setCategory('TODOS')">Todos</button>`;
     
-    // Categorias únicas baseadas nos modelos
+    // Categorias exclusivas baseadas nos modelos existentes
     const uniqueCats = [...new Set(DB.modelos.map(m => String(m.tipo || "").trim()))].filter(t => t && t !== "undefined").sort();
     uniqueCats.forEach(c => {
       chips.innerHTML += `<button class="chip ${DB.cat === c ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`;
@@ -294,7 +292,7 @@
     const isNew = document.getElementById('new-model-block').style.display === 'block';
     const nameInput = document.getElementById('f-new-name').value;
     
-    // ID Automático baseado no nome ou selecionado
+    // Gerar ID seguro
     const mid = isNew ? nameInput.toLowerCase().trim().replace(/\s+/g,'_').normalize("NFD").replace(/[\u0300-\u036f]/g, "") : document.getElementById('f-modelo').value;
     
     if(!mid || !document.getElementById('f-serial').value) return alert("Erro: Série e Modelo são obrigatórios!");
@@ -323,7 +321,7 @@
     btn.innerText = "A GUARDAR..."; btn.disabled = true;
     try {
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-      alert("Sucesso! Item registado.");
+      alert("Item registado com sucesso!");
       resetForm();
       setTimeout(load, 2000);
       showView('inventory');
@@ -348,16 +346,16 @@
       const m = findModel(a.modeloid) || {};
       const text = (String(a.serial||"") + String(a.hostname||"") + String(m.nome||"") + String(a.ip||"")).toLowerCase();
       
-      // Filtro de categoria ignorando espaços e cases
-      const matchCat = DB.cat === 'TODOS' || String(m.tipo).trim().toLowerCase() === DB.cat.trim().toLowerCase();
+      // Filtro de categoria corrigido (mais tolerante)
+      const matchCat = DB.cat === 'TODOS' || (m.tipo && String(m.tipo).trim().toLowerCase() === DB.cat.trim().toLowerCase());
       const matchRoom = r === 'ALL' || String(a.setor) === r;
       return matchCat && matchRoom && text.includes(q);
     });
 
-    if(!filtered.length) { grid.innerHTML = '<div class="loader">Nenhum equipamento nesta categoria.</div>'; return; }
+    if(!filtered.length) { grid.innerHTML = '<div class="loader">Nenhum equipamento encontrado nesta categoria.</div>'; return; }
 
     grid.innerHTML = filtered.reverse().map(a => {
-      const m = findModel(a.modeloid) || {};
+      const m = findModel(a.modeloid) || { nome: 'Modelo em Falta: ' + a.modeloid, tipo: 'ATIVO', icon: '❓' };
       const icon = m.icon || '📦';
       
       let specs = [];
@@ -372,13 +370,13 @@
           <button class="delete-btn" onclick="askDelete('asset','${a.id}')">✕</button>
           <div class="card-img"><span>${icon}</span></div>
           <div class="card-content">
-            <div class="card-title">${m.nome || 'Erro: ' + a.modeloid}</div>
-            <div class="card-sub">${m.tipo || 'DESCONHECIDO'}</div>
-            <div class="badge">${a.setor || 'Sem Sala'}</div>
-            <div style="margin-top:8px;">${specs.map(s => `<span class="spec-badge">${s}</span>`).join('')}</div>
+            <div class="card-title">${m.nome}</div>
+            <div class="card-sub">${m.tipo}</div>
+            <div class="badge">${a.setor || 'Sem Localização'}</div>
+            <div style="margin-top:8px; display: flex; flex-wrap: wrap;">${specs.map(s => `<span class="spec-badge">${s}</span>`).join('')}</div>
             <div class="data-grid">
-              <div><div class="data-lbl">SÉRIE</div><div>${a.serial}</div></div>
-              <div><div class="data-lbl">HOST</div><div>${a.hostname || '--'}</div></div>
+              <div><div class="data-lbl">SÉRIE / PAT</div><div>${a.serial}</div></div>
+              <div><div class="data-lbl">HOST / NOME</div><div>${a.hostname || '--'}</div></div>
             </div>
           </div>
         </div>`;
@@ -398,7 +396,7 @@
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', id: TO_DELETE.id }) });
       document.getElementById('overlay').classList.remove('active');
       setTimeout(load, 1500);
-    } catch (e) { alert("Falha ao eliminar."); } finally { btn.innerText = "Sim"; }
+    } catch (e) { alert("Erro ao eliminar."); } finally { btn.innerText = "Sim"; }
   }
 </script>
 </body>
